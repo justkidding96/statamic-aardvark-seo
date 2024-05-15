@@ -1,8 +1,8 @@
-import MetaTitleFieldtype from './components/fieldtypes/MetaTitleFieldtype';
-import MetaDescriptionFieldtype from './components/fieldtypes/MetaDescriptionFieldtype';
-import GooglePreviewFieldtype from './components/fieldtypes/GooglePreviewFieldtype';
-import ManualRedirectsListing from './components/cp/redirects/manual/Listing';
-import RedirectsPublishForm from './components/cp/redirects/PublishForm';
+import MetaTitleFieldtype from './components/fieldtypes/MetaTitleFieldtype.vue';
+import MetaDescriptionFieldtype from './components/fieldtypes/MetaDescriptionFieldtype.vue';
+import GooglePreviewFieldtype from './components/fieldtypes/GooglePreviewFieldtype.vue';
+import ManualRedirectsListing from './components/cp/redirects/manual/Listing.vue';
+import RedirectsPublishForm from './components/cp/redirects/PublishForm.vue';
 
 Statamic.booting(() => {
     // Fieldtypes

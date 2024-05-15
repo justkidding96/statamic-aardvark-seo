@@ -3,3 +3,4 @@ node_modules
 vendor
 .php_cs.cache
 .antlers.json
+resources/dist/hot

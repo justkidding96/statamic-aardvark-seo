@@ -11,7 +11,7 @@
 </template>
 
 <script>
-    import MetaDataAnalyser from './mixins/MetaDataAnalyser';
+    import MetaDataAnalyser from './mixins/MetaDataAnalyser.vue';
 
     export default {
         mixins: [Fieldtype, MetaDataAnalyser],
@@ -48,7 +48,7 @@
                             caption:
                             "Your meta title is too long, <strong>the ideal length is between 20 and 70 characters.</strong>"
                         };
-                        break;
+                    break;
                 }
                 return validation;
             }

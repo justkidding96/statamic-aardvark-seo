@@ -10,10 +10,13 @@ View the full documentation on the [Statamic Marketplace](https://statamic.com/a
 
 ## Statamic support
 
-| Statamic     | Status                 |
-| -----------  | ---------------------- |
-| v4           | Active development     |
-| v3           | Bug and security fixes |
+| Statamic     | Aardvark               | Status                 |
+| -----------  | ---------------------- | ---------------------- |
+| v5           | v5                     | Active development     |
+| v4           | v3                     | Security fixes         |
+| v3.4         | v2                     | Security fixes         |
+| v3.3         | v2                     | No longer supported    |
+
 
 ## Contributing
 

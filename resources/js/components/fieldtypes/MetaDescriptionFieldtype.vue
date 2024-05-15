@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import MetaDataAnalyser from './mixins/MetaDataAnalyser';
+    import MetaDataAnalyser from './mixins/MetaDataAnalyser.vue';
 
     export default {
         mixins: [Fieldtype, MetaDataAnalyser],

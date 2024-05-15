@@ -63,20 +63,20 @@ class ServiceProvider extends AddonServiceProvider
         'web' => __DIR__ . '/../routes/web.php',
     ];
 
-    protected $scripts = [
-        __DIR__ . '/../public/js/aardvark-seo.js',
-    ];
-
-    protected $stylesheets = [
-        __DIR__ . '/../public/css/aardvark-seo.css',
-    ];
-
     protected $subscribe = [
         SitemapCacheInvalidationSubscriber::class,
     ];
 
     protected $tags = [
         AardvarkSeoTags::class,
+    ];
+
+    protected $vite = [
+        'input' => [
+            'resources/js/app.js',
+            'resources/css/app.css',
+        ],
+        'publicDirectory' => 'resources/dist',
     ];
 
     public function boot()

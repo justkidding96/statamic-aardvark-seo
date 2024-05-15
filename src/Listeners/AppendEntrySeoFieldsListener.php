@@ -29,6 +29,8 @@ class AppendEntrySeoFieldsListener implements SeoFieldsListener
             $on_page_bp = OnPageSeoBlueprint::requestBlueprint();
             $contents['tabs']['SEO'] = $on_page_bp->contents()['tabs']['main'];
 
+            // Setting the parent to null fixes several issues caused by https://github.com/statamic/cms/pull/9585
+            $bp->setParent(null);
             $bp->setContents($contents);
         }
     }
