@@ -10,6 +10,7 @@ Then publish the publishables from the service provider:
 ```
 php artisan vendor:publish --provider="WithCandour\AardvarkSeo\ServiceProvider"
 ```
+This publishes a configuration file and an optional database migration for using the database storage driver.
 
 #### Install via CP
 Or alternatively search for us in the `Tools > Addons` section of the Statamic control panel.
@@ -49,6 +50,23 @@ Aardvark SEO integrates with the [Statamic Git functionality](https://statamic.d
 !.gitignore
 !/addons/aardvark-seo
 ```
+
+### Database storage
+
+If you plan to store Aardvark SEO data in a database you should publish and run the optional `create_aardvark_seo_storage` migration.
+
+Then ensure your `config/aardvark-seo.php` configuration file includes the following keys:
+
+```
+'storage_driver' => env('AARDVARK_SEO_STORAGE_DRIVER', 'file'),
+'database_connection' => env('AARDVARK_SEO_DATABASE_CONNECTION', null),
+```
+
+You can enable database storage by setting the `AARDVARK_SEO_STORAGE_DRIVER` environment variable to `database`.
+
+If you wish to use a database connection other than the application default, you can optionally specify
+the connection name using the `AARDVARK_SEO_DATABASE_CONNECTION` environment variable.
+
 
 ## Permissions
 

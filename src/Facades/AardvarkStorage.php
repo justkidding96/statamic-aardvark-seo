@@ -2,8 +2,11 @@
 
 namespace WithCandour\AardvarkSeo\Facades;
 
+use Illuminate\Support\Facades\Config;
 use WithCandour\AardvarkSeo\Storage\GlobalsStorage;
 use Illuminate\Support\Facades\Facade;
+use WithCandour\AardvarkSeo\Storage\DatabaseStorage;
+use WithCandour\AardvarkSeo\Storage\FileStorage;
 
 class AardvarkStorage extends Facade
 {
@@ -12,6 +15,13 @@ class AardvarkStorage extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return GlobalsStorage::class;
+        $driver = Config::get('aardvark-seo.storage_driver', 'file');
+
+        switch ($driver) {
+            case 'database':
+                return DatabaseStorage::class;
+            default:
+                return FileStorage::class;
+        }
     }
 }

@@ -95,6 +95,10 @@ class ServiceProvider extends AddonServiceProvider
             __DIR__ . '/../config/aardvark-seo.php' => config_path('aardvark-seo.php'),
         ], 'config');
 
+        $this->publishes([
+            __DIR__ . '/../database/migrations/create_aardvark_seo_storage_table.stub' => database_path('migrations/2024_10_15_10000_create_aardvark_seo_storage_table.php'),
+        ], 'aardvark-seo-migrations');
+
         // Set up permissions
         $this->bootPermissions();
 
