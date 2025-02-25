@@ -16,21 +16,33 @@
 
         computed: {
             previewParts() {
+
                 const state = this.$store.state.publish[this.storeName];
+
                 const {
                     meta_title,
                     meta_description,
                     slug,
                     title,
                 } = state.values;
+
                 const {
                     site_name,
                     site_url,
                     title_separator,
+                    default_locale,
                 } = this.meta;
 
+                // Initialise pageTitle with meta_title if available, otherwise combine title with site name and separator.
+                let pageTitle = meta_title || `${title}${site_name ? ` ${title_separator} ${site_name}` : ''}`;
+
+                // Override pageTitle for non-default locales without a localised meta_title, using title and optionally site name and separator.
+                if (state && state.localizedFields && default_locale !== state.site && !state.localizedFields.includes('meta_title')) {
+                    pageTitle = `${title}${site_name ? ` ${title_separator} ${site_name}` : ''}`;
+                }
+
                 return {
-                    title: meta_title || `${title} ${title_separator} ${site_name}`,
+                    title: pageTitle,
                     url: `${site_url}/${slug}`,
                     description: meta_description
                 }

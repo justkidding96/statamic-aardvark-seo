@@ -21,6 +21,7 @@ class AardvarkSeoGooglePreviewFieldtype extends Fieldtype
             'site_name' => $data->get('site_name', ''),
             'site_url' => $site->absoluteUrl(),
             'title_separator' => $data->get('title_separator', '|'),
+            'default_locale' => Site::default()->handle(),
         ];
     }
 }

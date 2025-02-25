@@ -11,6 +11,7 @@ use WithCandour\AardvarkSeo\Blueprints\CP\MarketingSettingsBlueprint;
 use WithCandour\AardvarkSeo\Blueprints\CP\SocialSettingsBlueprint;
 use WithCandour\AardvarkSeo\Blueprints\CP\OnPageSeoBlueprint;
 use WithCandour\AardvarkSeo\Facades\AardvarkStorage;
+use Statamic\Facades\Entry;
 
 /**
  * Helper class for parsing on-page data
@@ -158,21 +159,80 @@ class PageDataParser
      */
     public static function generatePageTitle($data, $ctx)
     {
-        if ($data->get('meta_title') && $data->get('meta_title')->raw()) {
+        // Check if an ID exists in the provided data.
+        if ($data->get('id')) {
+
+            // Retrieve the default site's configuration to compare locales.
+            $defaultSite = Site::default();
+            // Get the handle (identifier) of the default site.
+            $defaultLocale = $defaultSite->handle();
+            // Find the entry associated with the given ID.
+            $entry = Entry::find($data->get('id')->raw());
+
+            // Ensure the entry exists and its locale does not match the default site's locale.
+            if ($entry && method_exists($entry, 'locale') && $defaultLocale != $entry->locale()) {
+
+                // Check if the entry has a 'meta_title' set.
+                if ($entry->has('meta_title') && !empty ($entry->get('meta_title'))) {
+                    // If 'meta_title' exists, parse it with context and return.
+                    return Parse::template($entry->get('meta_title'), $ctx);
+                }
+
+                // If there's no 'meta_title', check for a regular 'title' field as a fallback.
+                if ($entry->has('title') && !empty ($entry->get('title'))) {
+
+                    $title = self::constructPageTitle($ctx, $entry->get('title'));
+
+                    // Parse and return the 'title' with context.
+                    return Parse::template($title, $ctx);
+                }
+
+                // If the localized entry lacks a 'title' or 'meta_title', fall back to the 'title' from the original data.
+                if ($data->has('title') && !empty ($data->get('title'))) {
+
+                    // Construct the page title by combining the entry title with the site name and title separator, only if the site name is set.
+                    $title = self::constructPageTitle($ctx, $data->get('title'));
+
+                    // Parse and return the 'title' with context.
+                    return Parse::template($title, $ctx);
+                }
+            }
+        }
+
+        if ($data->has('meta_title') && !empty ($data->get('meta_title')->raw())) {
             return Parse::template($data->get('meta_title'), $ctx);
         }
 
         if ($data->get('response_code') === 404) {
             $data->put('title', '404');
         }
+        $title = self::constructPageTitle($ctx, $data->get('title'));
+
+        return $title;
+    }
+
+    /**
+     * Constructs the page title by combining the entry title with the site name and title separator.
+     *
+     * @param string $title The primary title part.
+     * @param Illuminate\Support\Collection $storage The storage collection containing site configuration.
+     * @return string The constructed page title.
+     */
+    protected static function constructPageTitle($ctx, $title): string {
 
         $storage = self::getSettingsBlueprintWithValues($ctx, 'general', new GeneralSettingsBlueprint());
+        $titleParts = [$title];
 
-        return implode(' ', [
-            $data->get('title'),
-            $storage->get('title_separator'),
-            $storage->get('site_name'),
-        ]);
+        $siteName = $storage->get('site_name');
+        if ($siteName !== null) {
+            $siteNameValue = $siteName->raw();
+            if (!empty($siteNameValue)) {
+                $titleParts[] = $storage->get('title_separator');
+                $titleParts[] = $siteNameValue;
+            }
+        }
+
+        return implode(' ', array_filter($titleParts));
     }
 
     /**

@@ -13,13 +13,15 @@ class AardvarkSeoMetaTitleFieldtype extends Fieldtype
     /**
      * Load the global seo settings from storage
      */
-    public function preload()
+    public function preload(): array
     {
         $site = Site::selected();
         $data = AardvarkStorage::getYaml('general', $site, true);
+
         return [
             'site_name' => $data->get('site_name', ''),
             'title_separator' => $data->get('title_separator', '|'),
+            'default_locale' => Site::default()->handle(),
         ];
     }
 }
