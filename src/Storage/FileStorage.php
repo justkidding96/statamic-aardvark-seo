@@ -8,7 +8,7 @@ use Statamic\Facades\File;
 use Statamic\Facades\Site;
 use Statamic\Facades\YAML;
 
-class GlobalsStorage implements Storage
+class FileStorage implements Storage
 {
     const prefix = 'aardvark';
 
