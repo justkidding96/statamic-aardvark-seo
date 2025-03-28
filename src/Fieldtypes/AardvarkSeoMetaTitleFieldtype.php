@@ -17,9 +17,11 @@ class AardvarkSeoMetaTitleFieldtype extends Fieldtype
     {
         $site = Site::selected();
         $data = AardvarkStorage::getYaml('general', $site, true);
+
         return [
             'site_name' => $data->get('site_name', ''),
             'title_separator' => $data->get('title_separator', '|'),
+            'title_max_length' => config('aardvark-seo.title_max_length', 70),
         ];
     }
 }

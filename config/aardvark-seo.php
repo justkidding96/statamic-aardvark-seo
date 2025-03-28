@@ -6,4 +6,7 @@ return [
     'custom_socials' => [],
     'excluded_collections' => [],
     'excluded_taxonomies' => [],
+
+    'title_max_length' => 70,
+    'description_max_length' => 300,
 ];
