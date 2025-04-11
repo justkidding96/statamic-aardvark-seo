@@ -10,10 +10,13 @@
         </div>
     </div>
 
+
     <aardvark-manual-redirects-listing
-        :initial-redirects='@json($redirects)'
         :initial-columns='@json($columns)'
+        :initial-items='@json($items)'
+        site="default"
         create-url='{{ cp_route('aardvark-seo.redirects.manual-redirects.create') }}'
         bulk-actions-url='{{ cp_route('aardvark-seo.redirects.manual-redirects.actions') }}'
+        request-url='{{ cp_route('aardvark-seo.redirects.manual-redirects.index') }}'
     ></aardvark-manual-redirects-listing>
 @stop

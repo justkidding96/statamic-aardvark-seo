@@ -17,19 +17,10 @@ use WithCandour\AardvarkSeo\Redirects\Repositories\RedirectsRepository;
 
 class ManualRedirectsController extends Controller
 {
-    /**
-     * Display a list of manual redirects in a table with actions
-     */
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize('view aardvark redirects');
 
-        $crumbs = Breadcrumbs::make([
-            ['text' => 'Aardvark SEO', 'url' => cp_route('aardvark-seo.settings')],
-            ['text' => __('aardvark-seo::redirects.plural'), 'url' => cp_route('aardvark-seo.redirects.manual-redirects.index')],
-        ]);
-
-        // Generate columns
         $columns = [
             Column::make('source_url')->label(__('aardvark-seo::redirects.redirect.source_url')),
             Column::make('target_url')->label(__('aardvark-seo::redirects.redirect.target_url')),
@@ -37,27 +28,25 @@ class ManualRedirectsController extends Controller
             Column::make('is_active')->label(__('aardvark-seo::redirects.redirect.is_active')),
         ];
 
-        $redirects = $this->repository()->all()->map(function ($redirect) {
-            $delete_url = cp_route('aardvark-seo.redirects.manual-redirects.destroy', [
-                'manual_redirect' => $redirect['id'],
-            ]);
+        // Paginate response
+        $response = $this->repository()
+            ->setColumns($columns)
+            ->paginate(
+            perPage: (int) $request->input('perPage', 10),
+            query: $request->query()
+        );
 
-            $edit_url = cp_route('aardvark-seo.redirects.manual-redirects.edit', [
-                'manual_redirect' => $redirect['id'],
-            ]);
-
-            $redirect['delete_url'] = $delete_url;
-            $redirect['edit_url'] = $edit_url;
-            $redirect['title'] = $redirect['source_url'];
-
-            return $redirect;
-        });
+        // If the request is an AJAX request, return a JSON response
+        if ($request->wantsJson()) {
+            return response()->json($response);
+        }
 
         return view('aardvark-seo::cp.redirects.manual.index', [
             'title' => __('aardvark-seo::redirects.pages.manual'),
             'columns' => $columns,
-            'redirects' => $redirects,
-            'crumbs' => $crumbs,
+            'items' => $response['data'],
+            'crumbs' => $this->breadcrumbs(''),
+            'meta' => $response['meta'],
         ]);
     }
 
@@ -70,15 +59,9 @@ class ManualRedirectsController extends Controller
 
         $fields = $this->blueprint()->fields()->addValues([])->preProcess();
 
-        $crumbs = Breadcrumbs::make([
-            ['text' => 'Aardvark SEO', 'url' => cp_route('aardvark-seo.settings')],
-            ['text' => __('aardvark-seo::redirects.plural'), 'url' => cp_route('aardvark-seo.redirects.manual-redirects.index')],
-            ['text' => __('Create'), 'url' => null],
-        ]);
-
         return view('aardvark-seo::cp.redirects.manual.create', [
             'blueprint' => $this->blueprint()->toPublishArray(),
-            'crumbs' => $crumbs,
+            'crumbs' => $this->breadcrumbs('Create'),
             'meta' => $fields->meta(),
             'title' => __('aardvark-seo::redirects.pages.create'),
             'values' => $fields->values(),
@@ -112,25 +95,17 @@ class ManualRedirectsController extends Controller
     {
         $this->authorize('edit aardvark redirects');
 
-        $crumbs = Breadcrumbs::make([
-            ['text' => 'Aardvark SEO', 'url' => cp_route('aardvark-seo.settings')],
-            ['text' => __('aardvark-seo::redirects.plural'), 'url' => cp_route('aardvark-seo.redirects.manual-redirects.index')],
-            ['text' => __('Edit'), 'url' => null],
-        ]);
-
-        $exists = $this->repository()->exists($redirect_id);
-
-        if (!$exists) {
+        if (!$this->repository()->exists($redirect_id)) {
             return redirect()->route('statamic.cp.aardvark-seo.redirects.manual-redirects.index');
         }
 
-        $existing = $this->repository()->get($redirect_id);
-
-        $fields = $this->blueprint()->fields()->addValues($existing)->preProcess();
+        $fields = $this->blueprint()->fields()
+            ->addValues($this->repository()->get($redirect_id))
+            ->preProcess();
 
         return view('aardvark-seo::cp.redirects.manual.edit', [
             'blueprint' => $this->blueprint()->toPublishArray(),
-            'crumbs' => $crumbs,
+            'crumbs' => $this->breadcrumbs('Edit'),
             'meta' => $fields->meta(),
             'title' => __('aardvark-seo::redirects.pages.edit'),
             'values' => $fields->values(),
@@ -175,6 +150,7 @@ class ManualRedirectsController extends Controller
      * Return the bulk actions for the redirects table
      *
      * @param Request $request
+     * @return Collection
      */
     public function bulkActions(Request $request)
     {
@@ -222,5 +198,14 @@ class ManualRedirectsController extends Controller
     private function repository()
     {
         return new RedirectsRepository('redirects/manual', Site::selected());
+    }
+
+    private function breadcrumbs(string $current)
+    {
+        return Breadcrumbs::make([
+            ['text' => 'Aardvark SEO', 'url' => cp_route('aardvark-seo.settings')],
+            ['text' => __('aardvark-seo::redirects.plural'), 'url' => cp_route('aardvark-seo.redirects.manual-redirects.index')],
+            ['text' => __($current), 'url' => null],
+        ]);
     }
 }
