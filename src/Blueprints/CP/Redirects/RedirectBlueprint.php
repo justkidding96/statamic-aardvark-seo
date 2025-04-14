@@ -21,6 +21,10 @@ class RedirectBlueprint implements AardvarkBlueprint
                             'field' => [
                                 'type' => 'text',
                                 'display' => __('aardvark-seo::redirects.redirect.source_url'),
+                                'validate' => [
+                                    'required',
+                                    'new WithCandour\AardvarkSeo\Rules\UniqueUrl',
+                                ]
                             ],
                         ],
                         [
@@ -28,6 +32,10 @@ class RedirectBlueprint implements AardvarkBlueprint
                             'field' => [
                                 'type' => 'text',
                                 'display' => __('aardvark-seo::redirects.redirect.target_url'),
+                                'validate' => [
+                                    'required',
+                                    'new WithCandour\AardvarkSeo\Rules\UniqueUrl',
+                                ]
                             ],
                         ],
                         [
