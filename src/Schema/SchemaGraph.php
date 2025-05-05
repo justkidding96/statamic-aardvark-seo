@@ -45,8 +45,13 @@ class SchemaGraph
         $webPage = new WebPage($this->context);
         $webPageData = $webPage->data();
 
-        // // If breadcrumbs are enabled - add them to the graph
-        if (!empty($this->globals->get('enable_breadcrumbs', 0)) && $this->context->get('url', '') !== '/') {
+        $enableBreadcrumbs = $this->globals->get('enable_breadcrumbs') ?? false;
+        if ($enableBreadcrumbs instanceof \Statamic\Fields\Value) {
+            $enableBreadcrumbs = (bool) $enableBreadcrumbs->value();
+        }
+
+        // If breadcrumbs are enabled - add them to the graph
+        if ($enableBreadcrumbs && $this->context->get('url', '') !== '/') {
             $breadcrumbs = new Breadcrumbs();
             $webPageData->breadcrumb($breadcrumbs->data());
         }
