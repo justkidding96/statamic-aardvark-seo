@@ -84,7 +84,7 @@ class PageDataParser
                 }
                 break;
             case 'collections':
-                $repo = $ctx->get('taxonomy');
+                $repo = $ctx->get('collection');
                 if ($repo instanceof \Statamic\Fields\Value) {
                     $repo = $repo->value();
                 }
