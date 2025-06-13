@@ -29,6 +29,9 @@ class Sitemap
      */
     public $site;
 
+    public $route;
+    public $url;
+
     /**
      * Create a new sitemap.
      *
