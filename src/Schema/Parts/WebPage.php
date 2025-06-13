@@ -13,6 +13,11 @@ use WithCandour\AardvarkSeo\Schema\Parts\Contracts\SchemaPart;
 
 class WebPage implements SchemaPart
 {
+    /**
+     * @var array
+     */
+    public $context;
+
     public function __construct($context = [])
     {
         $this->context = $context;

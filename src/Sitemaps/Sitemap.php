@@ -15,6 +15,21 @@ use WithCandour\AardvarkSeo\Blueprints\CP\SitemapSettingsBlueprint;
 class Sitemap
 {
     /**
+     * @var string
+     */
+    public $type;
+
+    /**
+     * @var string
+     */
+    public $handle;
+
+    /**
+     * @var Statamic\Sites\Site
+     */
+    public $site;
+
+    /**
      * Create a new sitemap.
      *
      * @param string $type
