@@ -1,12 +1,12 @@
 {
   "name": "aardvark-seo",
   "private": true,
-  "description": "Aardvark SEO addon for Statamic by Candour",
+  "description": "Aardvark SEO addon for Statamic.",
   "scripts": {
     "dev": "vite",
     "build": "vite build"
   },
-  "author": "Candour",
+  "author": "justkidding96",
   "dependencies": {
     "cross-env": "^7.0.3",
     "postcss": "^8.4.38",

@@ -4,7 +4,7 @@
 
 #### Install via composer:
 ```
-composer require withcandour/aardvark-seo
+composer require justkidding96/aardvark-seo
 ```
 Then publish the publishables from the service provider:
 ```

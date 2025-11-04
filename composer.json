@@ -1,6 +1,6 @@
 {
-    "name": "withcandour/aardvark-seo",
-    "description": "Save time and get your Statamic site to rank better - Candour's SEO addon for Statamic CMS",
+    "name": "justkidding96/aardvark-seo",
+    "description": "Save time and get your Statamic site to rank better with Aardvark SEO addon for Statamic CMS.",
     "version": "5.0.5",
     "type": "statamic-addon",
     "keywords": [
@@ -19,8 +19,8 @@
     ],
     "authors": [
         {
-            "name": "Candour",
-            "email": "aardvarkseo@withcandour.co.uk"
+            "name": "justkidding96",
+            "email": "info@thenextgen.io"
         }
     ],
     "autoload": {
@@ -31,7 +31,7 @@
     "extra": {
         "statamic": {
             "name": "Aardvark SEO",
-            "description": "Aardvark SEO addon"
+            "description": "Aardvark SEO addon for Statamic CMS."
         },
         "laravel": {
             "providers": [
