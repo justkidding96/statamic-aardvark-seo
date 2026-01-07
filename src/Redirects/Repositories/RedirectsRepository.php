@@ -58,7 +58,10 @@ class RedirectsRepository
      */
     public function sourceExists(string $source_url)
     {
-        return $this->redirects->contains('source_url', $source_url);
+        return $this->redirects->contains(function ($redirect) use ($source_url) {
+            $redirect_source_url = str_replace('/', '\/', $redirect['source_url']);
+            return preg_match("/^{$redirect_source_url}/i", $source_url) === 1 && $source_url !== $redirect['target_url'];
+        });
     }
 
     /**
@@ -90,7 +93,10 @@ class RedirectsRepository
             return false;
         }
 
-        return $this->redirects->where('source_url', $source_url)->first();
+        return $this->redirects->first(function ($redirect) use ($source_url) {
+            $redirect_source_url = str_replace('/', '\/', $redirect['source_url']);
+            return preg_match("/^{$redirect_source_url}/i", $source_url) === 1 && $source_url !== $redirect['target_url'];
+        });
     }
 
     /**
