@@ -1,13 +1,13 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Schema\Parts;
+namespace Justkidding96\AardvarkSeo\Schema\Parts;
 
 use Spatie\SchemaOrg\Schema;
 use Statamic\Facades\Config;
 use Statamic\Facades\URL;
-use WithCandour\AardvarkSeo\Schema\SchemaIds;
-use WithCandour\AardvarkSeo\Schema\Parts\SiteOwner;
-use WithCandour\AardvarkSeo\Schema\Parts\Contracts\SchemaPart;
+use Justkidding96\AardvarkSeo\Schema\SchemaIds;
+use Justkidding96\AardvarkSeo\Schema\Parts\SiteOwner;
+use Justkidding96\AardvarkSeo\Schema\Parts\Contracts\SchemaPart;
 
 class WebSite implements SchemaPart
 {

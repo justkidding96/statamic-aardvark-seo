@@ -1,12 +1,12 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Listeners;
+namespace Justkidding96\AardvarkSeo\Listeners;
 
 use Illuminate\Support\Facades\Cache;
 
 class DefaultsSitemapCacheInvalidationListener
 {
-    public function handle(\WithCandour\AardvarkSeo\Events\AardvarkContentDefaultsSaved $event)
+    public function handle(\Justkidding96\AardvarkSeo\Events\AardvarkContentDefaultsSaved $event)
     {
         $defaults = $event->defaults;
         $site = $defaults->site->handle();

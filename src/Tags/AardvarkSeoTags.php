@@ -1,14 +1,14 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Tags;
+namespace Justkidding96\AardvarkSeo\Tags;
 
 use Statamic\Facades\Entry;
 use Statamic\Facades\Site;
 use Statamic\Tags\Tags;
 use Statamic\View\View;
-use WithCandour\AardvarkSeo\Schema\SchemaGraph;
-use WithCandour\AardvarkSeo\Facades\AardvarkStorage;
-use WithCandour\AardvarkSeo\Facades\PageDataParser;
+use Justkidding96\AardvarkSeo\Schema\SchemaGraph;
+use Justkidding96\AardvarkSeo\Facades\AardvarkStorage;
+use Justkidding96\AardvarkSeo\Facades\PageDataParser;
 
 class AardvarkSeoTags extends Tags
 {

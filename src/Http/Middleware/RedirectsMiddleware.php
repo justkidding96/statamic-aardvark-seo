@@ -1,12 +1,12 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Http\Middleware;
+namespace Justkidding96\AardvarkSeo\Http\Middleware;
 
 use Statamic\Facades\Site;
 use Statamic\Support\Str;
 use Statamic\Facades\Config;
 use Statamic\Facades\URL;
-use WithCandour\AardvarkSeo\Redirects\Repositories\RedirectsRepository;
+use Justkidding96\AardvarkSeo\Redirects\Repositories\RedirectsRepository;
 
 class RedirectsMiddleware
 {

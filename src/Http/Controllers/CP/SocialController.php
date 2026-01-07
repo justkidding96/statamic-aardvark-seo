@@ -1,13 +1,13 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Http\Controllers\CP;
+namespace Justkidding96\AardvarkSeo\Http\Controllers\CP;
 
 use Statamic\CP\Breadcrumbs;
 use Statamic\Facades\Site;
-use WithCandour\AardvarkSeo\Blueprints\CP\SocialSettingsBlueprint;
-use WithCandour\AardvarkSeo\Facades\AardvarkStorage;
-use WithCandour\AardvarkSeo\Events\AardvarkGlobalsUpdated;
-use WithCandour\AardvarkSeo\Http\Controllers\CP\Contracts\Publishable;
+use Justkidding96\AardvarkSeo\Blueprints\CP\SocialSettingsBlueprint;
+use Justkidding96\AardvarkSeo\Facades\AardvarkStorage;
+use Justkidding96\AardvarkSeo\Events\AardvarkGlobalsUpdated;
+use Justkidding96\AardvarkSeo\Http\Controllers\CP\Contracts\Publishable;
 
 class SocialController extends Controller implements Publishable
 {

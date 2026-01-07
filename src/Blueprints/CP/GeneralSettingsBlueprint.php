@@ -1,8 +1,8 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Blueprints\CP;
+namespace Justkidding96\AardvarkSeo\Blueprints\CP;
 
-use WithCandour\AardvarkSeo\Blueprints\Blueprint as AardvarkBlueprint;
+use Justkidding96\AardvarkSeo\Blueprints\Blueprint as AardvarkBlueprint;
 use Statamic\Facades\Blueprint as StatamicBlueprint;
 
 class GeneralSettingsBlueprint implements AardvarkBlueprint

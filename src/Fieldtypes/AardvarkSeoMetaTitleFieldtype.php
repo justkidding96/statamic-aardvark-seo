@@ -1,10 +1,10 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Fieldtypes;
+namespace Justkidding96\AardvarkSeo\Fieldtypes;
 
 use Statamic\Facades\Site;
 use Statamic\Fields\Fieldtype;
-use WithCandour\AardvarkSeo\Facades\AardvarkStorage;
+use Justkidding96\AardvarkSeo\Facades\AardvarkStorage;
 
 class AardvarkSeoMetaTitleFieldtype extends Fieldtype
 {

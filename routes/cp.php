@@ -1,11 +1,11 @@
 <?php
 
-use WithCandour\AardvarkSeo\Http\Controllers\CP\DefaultsController;
-use WithCandour\AardvarkSeo\Http\Controllers\CP\GeneralController;
-use WithCandour\AardvarkSeo\Http\Controllers\CP\MarketingController;
-use WithCandour\AardvarkSeo\Http\Controllers\CP\Redirects\ManualRedirectsController;
-use WithCandour\AardvarkSeo\Http\Controllers\CP\SitemapController;
-use WithCandour\AardvarkSeo\Http\Controllers\CP\SocialController;
+use Justkidding96\AardvarkSeo\Http\Controllers\CP\DefaultsController;
+use Justkidding96\AardvarkSeo\Http\Controllers\CP\GeneralController;
+use Justkidding96\AardvarkSeo\Http\Controllers\CP\MarketingController;
+use Justkidding96\AardvarkSeo\Http\Controllers\CP\Redirects\ManualRedirectsController;
+use Justkidding96\AardvarkSeo\Http\Controllers\CP\SitemapController;
+use Justkidding96\AardvarkSeo\Http\Controllers\CP\SocialController;
 
 Route::prefix('aardvark-seo')
     ->name('aardvark-seo.')

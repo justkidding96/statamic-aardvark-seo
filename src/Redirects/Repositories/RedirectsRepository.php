@@ -1,12 +1,12 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Redirects\Repositories;
+namespace Justkidding96\AardvarkSeo\Redirects\Repositories;
 
 use Illuminate\Support\Collection;
 use Statamic\Facades\Url;
 use Statamic\Sites\Site;
 use Statamic\Support\Str;
-use WithCandour\AardvarkSeo\Facades\AardvarkStorage;
+use Justkidding96\AardvarkSeo\Facades\AardvarkStorage;
 
 class RedirectsRepository
 {

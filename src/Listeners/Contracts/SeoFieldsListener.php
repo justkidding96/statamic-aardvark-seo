@@ -1,6 +1,6 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Listeners\Contracts;
+namespace Justkidding96\AardvarkSeo\Listeners\Contracts;
 
 interface SeoFieldsListener
 {

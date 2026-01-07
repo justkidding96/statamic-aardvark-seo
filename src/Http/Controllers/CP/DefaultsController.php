@@ -1,16 +1,16 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Http\Controllers\CP;
+namespace Justkidding96\AardvarkSeo\Http\Controllers\CP;
 
 use Illuminate\Http\Request;
 use Statamic\CP\Breadcrumbs;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Site;
 use Statamic\Facades\Taxonomy;
-use WithCandour\AardvarkSeo\Blueprints\CP\DefaultsSettingsBlueprint;
-use WithCandour\AardvarkSeo\Facades\AardvarkStorage;
-use WithCandour\AardvarkSeo\Content\ContentDefaults;
-use WithCandour\AardvarkSeo\Events\AardvarkContentDefaultsSaved;
+use Justkidding96\AardvarkSeo\Blueprints\CP\DefaultsSettingsBlueprint;
+use Justkidding96\AardvarkSeo\Facades\AardvarkStorage;
+use Justkidding96\AardvarkSeo\Content\ContentDefaults;
+use Justkidding96\AardvarkSeo\Events\AardvarkContentDefaultsSaved;
 
 class DefaultsController extends Controller
 {

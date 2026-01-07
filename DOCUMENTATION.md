@@ -4,11 +4,11 @@
 
 #### Install via composer:
 ```
-composer require withcandour/aardvark-seo
+composer require justkidding96/aardvark-seo
 ```
 Then publish the publishables from the service provider:
 ```
-php artisan vendor:publish --provider="WithCandour\AardvarkSeo\ServiceProvider"
+php artisan vendor:publish --provider="Justkidding96\AardvarkSeo\ServiceProvider"
 ```
 
 #### Install via CP
@@ -48,6 +48,47 @@ Aardvark SEO integrates with the [Statamic Git functionality](https://statamic.d
 /*
 !.gitignore
 !/addons/aardvark-seo
+```
+
+## Upgrading
+
+### Upgrading to 5.1.0
+
+Version 5.1.0 introduces breaking changes due to a namespace change.
+
+#### Breaking Changes
+
+The package namespace has changed from `WithCandour\AardvarkSeo` to `Justkidding96\AardvarkSeo`.
+
+#### Upgrade Steps
+
+1. Update your `composer.json` to require the new package:
+```bash
+composer remove withcandour/aardvark-seo
+composer require justkidding96/aardvark-seo
+```
+
+2. Update any references to the old namespace in your code:
+```
+# Old
+WithCandour\AardvarkSeo\...
+
+# New
+Justkidding96\AardvarkSeo\...
+```
+
+3. If you have published the service provider, update the reference:
+```php
+# Old
+WithCandour\AardvarkSeo\ServiceProvider
+
+# New
+Justkidding96\AardvarkSeo\ServiceProvider
+```
+
+4. Clear your caches:
+```bash
+php artisan optimize:clear
 ```
 
 ## Permissions

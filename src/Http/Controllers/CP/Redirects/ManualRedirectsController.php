@@ -1,19 +1,19 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Http\Controllers\CP\Redirects;
+namespace Justkidding96\AardvarkSeo\Http\Controllers\CP\Redirects;
 
 use Illuminate\Http\Request;
 use Statamic\CP\Breadcrumbs;
 use Statamic\CP\Column;
 use Statamic\Facades\Action;
 use Statamic\Facades\Site;
-use WithCandour\AardvarkSeo\Actions\Redirects\DeleteManualRedirectsAction;
-use WithCandour\AardvarkSeo\Events\Redirects\ManualRedirectCreated;
-use WithCandour\AardvarkSeo\Events\Redirects\ManualRedirectDeleted;
-use WithCandour\AardvarkSeo\Events\Redirects\ManualRedirectSaved;
-use WithCandour\AardvarkSeo\Blueprints\CP\Redirects\RedirectBlueprint;
-use WithCandour\AardvarkSeo\Http\Controllers\CP\Controller;
-use WithCandour\AardvarkSeo\Redirects\Repositories\RedirectsRepository;
+use Justkidding96\AardvarkSeo\Actions\Redirects\DeleteManualRedirectsAction;
+use Justkidding96\AardvarkSeo\Events\Redirects\ManualRedirectCreated;
+use Justkidding96\AardvarkSeo\Events\Redirects\ManualRedirectDeleted;
+use Justkidding96\AardvarkSeo\Events\Redirects\ManualRedirectSaved;
+use Justkidding96\AardvarkSeo\Blueprints\CP\Redirects\RedirectBlueprint;
+use Justkidding96\AardvarkSeo\Http\Controllers\CP\Controller;
+use Justkidding96\AardvarkSeo\Redirects\Repositories\RedirectsRepository;
 
 class ManualRedirectsController extends Controller
 {

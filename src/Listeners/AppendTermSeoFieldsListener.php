@@ -1,11 +1,11 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Listeners;
+namespace Justkidding96\AardvarkSeo\Listeners;
 
 use Statamic\Events\TermBlueprintFound;
 use Statamic\Support\Str;
-use WithCandour\AardvarkSeo\Blueprints\CP\OnPageSeoBlueprint;
-use WithCandour\AardvarkSeo\Listeners\Contracts\SeoFieldsListener;
+use Justkidding96\AardvarkSeo\Blueprints\CP\OnPageSeoBlueprint;
+use Justkidding96\AardvarkSeo\Listeners\Contracts\SeoFieldsListener;
 
 class AppendTermSeoFieldsListener implements SeoFieldsListener
 {

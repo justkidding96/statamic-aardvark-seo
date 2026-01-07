@@ -1,7 +1,7 @@
 {
   "name": "aardvark-seo",
   "private": true,
-  "description": "Aardvark SEO addon for Statamic by Candour",
+  "description": "Aardvark SEO addon for Statamic",
   "scripts": {
     "dev": "vite",
     "build": "vite build"

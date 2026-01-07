@@ -1,6 +1,6 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Actions\Redirects;
+namespace Justkidding96\AardvarkSeo\Actions\Redirects;
 
 use Statamic\Actions\Action;
 

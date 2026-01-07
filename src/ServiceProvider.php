@@ -1,6 +1,6 @@
 <?php
 
-namespace WithCandour\AardvarkSeo;
+namespace Justkidding96\AardvarkSeo;
 
 use Illuminate\Support\Facades\Route;
 use Statamic\Facades\CP\Nav;
@@ -11,22 +11,22 @@ use Statamic\Events\EntryBlueprintFound;
 use Statamic\Events\TermBlueprintFound;
 use Statamic\GraphQL\Types\GridItemType;
 use Statamic\Providers\AddonServiceProvider;
-use WithCandour\AardvarkSeo\Blueprints\CP\OnPageSeoBlueprint;
-use WithCandour\AardvarkSeo\Events\AardvarkContentDefaultsSaved;
-use WithCandour\AardvarkSeo\Events\AardvarkGlobalsUpdated;
-use WithCandour\AardvarkSeo\Events\Redirects\ManualRedirectCreated;
-use WithCandour\AardvarkSeo\Events\Redirects\ManualRedirectDeleted;
-use WithCandour\AardvarkSeo\Events\Redirects\ManualRedirectSaved;
-use WithCandour\AardvarkSeo\Fieldtypes\AardvarkSeoMetaTitleFieldtype;
-use WithCandour\AardvarkSeo\Fieldtypes\AardvarkSeoMetaDescriptionFieldtype;
-use WithCandour\AardvarkSeo\Fieldtypes\AardvarkSeoGooglePreviewFieldtype;
-use WithCandour\AardvarkSeo\Listeners\AppendEntrySeoFieldsListener;
-use WithCandour\AardvarkSeo\Listeners\AppendTermSeoFieldsListener;
-use WithCandour\AardvarkSeo\Listeners\DefaultsSitemapCacheInvalidationListener;
-use WithCandour\AardvarkSeo\Listeners\Subscribers\SitemapCacheInvalidationSubscriber;
-use WithCandour\AardvarkSeo\Http\Middleware\RedirectsMiddleware;
-use WithCandour\AardvarkSeo\Modifiers\ParseLocaleModifier;
-use WithCandour\AardvarkSeo\Tags\AardvarkSeoTags;
+use Justkidding96\AardvarkSeo\Blueprints\CP\OnPageSeoBlueprint;
+use Justkidding96\AardvarkSeo\Events\AardvarkContentDefaultsSaved;
+use Justkidding96\AardvarkSeo\Events\AardvarkGlobalsUpdated;
+use Justkidding96\AardvarkSeo\Events\Redirects\ManualRedirectCreated;
+use Justkidding96\AardvarkSeo\Events\Redirects\ManualRedirectDeleted;
+use Justkidding96\AardvarkSeo\Events\Redirects\ManualRedirectSaved;
+use Justkidding96\AardvarkSeo\Fieldtypes\AardvarkSeoMetaTitleFieldtype;
+use Justkidding96\AardvarkSeo\Fieldtypes\AardvarkSeoMetaDescriptionFieldtype;
+use Justkidding96\AardvarkSeo\Fieldtypes\AardvarkSeoGooglePreviewFieldtype;
+use Justkidding96\AardvarkSeo\Listeners\AppendEntrySeoFieldsListener;
+use Justkidding96\AardvarkSeo\Listeners\AppendTermSeoFieldsListener;
+use Justkidding96\AardvarkSeo\Listeners\DefaultsSitemapCacheInvalidationListener;
+use Justkidding96\AardvarkSeo\Listeners\Subscribers\SitemapCacheInvalidationSubscriber;
+use Justkidding96\AardvarkSeo\Http\Middleware\RedirectsMiddleware;
+use Justkidding96\AardvarkSeo\Modifiers\ParseLocaleModifier;
+use Justkidding96\AardvarkSeo\Tags\AardvarkSeoTags;
 
 class ServiceProvider extends AddonServiceProvider
 {

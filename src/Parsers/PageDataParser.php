@@ -1,16 +1,16 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Parsers;
+namespace Justkidding96\AardvarkSeo\Parsers;
 
 use Statamic\Facades\Collection;
 use Statamic\Facades\Parse;
 use Statamic\Facades\Site;
-use WithCandour\AardvarkSeo\Blueprints\CP\DefaultsSettingsBlueprint;
-use WithCandour\AardvarkSeo\Blueprints\CP\GeneralSettingsBlueprint;
-use WithCandour\AardvarkSeo\Blueprints\CP\MarketingSettingsBlueprint;
-use WithCandour\AardvarkSeo\Blueprints\CP\SocialSettingsBlueprint;
-use WithCandour\AardvarkSeo\Blueprints\CP\OnPageSeoBlueprint;
-use WithCandour\AardvarkSeo\Facades\AardvarkStorage;
+use Justkidding96\AardvarkSeo\Blueprints\CP\DefaultsSettingsBlueprint;
+use Justkidding96\AardvarkSeo\Blueprints\CP\GeneralSettingsBlueprint;
+use Justkidding96\AardvarkSeo\Blueprints\CP\MarketingSettingsBlueprint;
+use Justkidding96\AardvarkSeo\Blueprints\CP\SocialSettingsBlueprint;
+use Justkidding96\AardvarkSeo\Blueprints\CP\OnPageSeoBlueprint;
+use Justkidding96\AardvarkSeo\Facades\AardvarkStorage;
 
 /**
  * Helper class for parsing on-page data

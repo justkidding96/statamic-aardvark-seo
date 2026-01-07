@@ -1,8 +1,8 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Facades;
+namespace Justkidding96\AardvarkSeo\Facades;
 
-use WithCandour\AardvarkSeo\Parsers\PageDataParser as Parser;
+use Justkidding96\AardvarkSeo\Parsers\PageDataParser as Parser;
 use Illuminate\Support\Facades\Facade;
 
 class PageDataParser extends Facade

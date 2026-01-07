@@ -1,10 +1,10 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Actions\Redirects;
+namespace Justkidding96\AardvarkSeo\Actions\Redirects;
 
 use Statamic\Actions\Action;
 use Statamic\Facades\Site;
-use WithCandour\AardvarkSeo\Redirects\Repositories\RedirectsRepository;
+use Justkidding96\AardvarkSeo\Redirects\Repositories\RedirectsRepository;
 
 class DeleteManualRedirectsAction extends DeleteRedirectsAction
 {

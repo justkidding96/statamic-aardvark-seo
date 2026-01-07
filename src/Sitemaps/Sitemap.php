@@ -1,6 +1,6 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Sitemaps;
+namespace Justkidding96\AardvarkSeo\Sitemaps;
 
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
@@ -8,9 +8,9 @@ use Statamic\Facades\Site;
 use Statamic\Facades\Taxonomy;
 use Statamic\Facades\Term;
 use Statamic\Support\Str;
-use WithCandour\AardvarkSeo\Facades\AardvarkStorage;
-use WithCandour\AardvarkSeo\Facades\ContentDefaults as Defaults;
-use WithCandour\AardvarkSeo\Blueprints\CP\SitemapSettingsBlueprint;
+use Justkidding96\AardvarkSeo\Facades\AardvarkStorage;
+use Justkidding96\AardvarkSeo\Facades\ContentDefaults as Defaults;
+use Justkidding96\AardvarkSeo\Blueprints\CP\SitemapSettingsBlueprint;
 
 class Sitemap
 {
@@ -290,7 +290,7 @@ class Sitemap
      *
      * @param string $handle
      *
-     * @return WithCandour\AardvarkSeo\Sitemaps\Sitemap
+     * @return Justkidding96\AardvarkSeo\Sitemaps\Sitemap
      */
     public static function findByHandle($handle = '')
     {

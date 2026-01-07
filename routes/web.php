@@ -2,7 +2,7 @@
 
 use Statamic\Facades\Site;
 use Statamic\Facades\URL;
-use WithCandour\AardvarkSeo\Http\Controllers\Web\SitemapController;
+use Justkidding96\AardvarkSeo\Http\Controllers\Web\SitemapController;
 
 Route::name('aardvark-xml-sitemap')
     ->group(function () {

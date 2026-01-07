@@ -1,8 +1,8 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Listeners\Subscribers;
+namespace Justkidding96\AardvarkSeo\Listeners\Subscribers;
 
-use WithCandour\AardvarkSeo\Listeners\ContentSitemapCacheInvalidationListener;
+use Justkidding96\AardvarkSeo\Listeners\ContentSitemapCacheInvalidationListener;
 
 class SitemapCacheInvalidationSubscriber
 {
