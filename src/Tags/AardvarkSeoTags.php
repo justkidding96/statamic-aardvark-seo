@@ -101,6 +101,9 @@ class AardvarkSeoTags extends Tags
             return null;
         }
 
+        if (!$ctx->get('aardvark_general_settings')){
+            return null;
+        }
 
         $defaultLocale = $ctx->get('aardvark_general_settings')['default_locale'];
 
@@ -172,6 +175,10 @@ class AardvarkSeoTags extends Tags
     {
         $ctx = collect($this->context);
         $attrs = [];
+
+        if (!$ctx->get('aardvark_general_settings')){
+            return null;
+        }
 
         $global_no_index = $ctx->get('aardvark_general_settings')['no_index_site'];
 
