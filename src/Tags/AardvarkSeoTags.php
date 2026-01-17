@@ -14,6 +14,14 @@ class AardvarkSeoTags extends Tags
 {
     protected static $handle = 'aardvark-seo';
 
+    // The $ctx property is used to store the context as a collection.
+    // It's initialised and set on the first method call to avoid subsequent calls.
+    protected $ctx = null;
+
+    // The $ctxParsed property holds the processed data obtained from the PageDataParser.
+    // It's initialised and set on the first method call to avoid subsequent calls.
+    protected $ctxParsed = null;
+
     /**
      * Return the <head /> tag content required for on-page SEO
      *
@@ -21,10 +29,26 @@ class AardvarkSeoTags extends Tags
      */
     public function head()
     {
-        $data = PageDataParser::getData(collect($this->context));
 
+        // Check if $this->ctx is not set. If not, initialise it with the current context.
+        if (!$this->ctx) {
+            $this->ctx = $this->context;
+        }
+
+        // Check if $this->ctxParsed is not set. If not, parse $this->ctx using PageDataParser
+        // and store the result in $this->ctxParsed for reuse.
+        if (!$this->ctxParsed) {
+            $this->ctxParsed = PageDataParser::getData($this->ctx);
+        }
+
+        $data = $this->ctxParsed;
+
+        // Check the version of Statamic Antlers. If it's 'regex', use the Laravel view helper,
+        // else use the Statamic View facade. Also, ensure $data is an array when passing it to the view.
         if (config('statamic.antlers.version') == 'regex') {
-            $view = view('aardvark-seo::tags.head', $data);
+            $view = $data instanceof \Illuminate\Support\Collection ?
+                view('aardvark-seo::tags.head', $data->all()) :
+                view('aardvark-seo::tags.head', $data);
         } else {
             $view = View::make('aardvark-seo::tags.head', $data->all());
         }
@@ -51,10 +75,26 @@ class AardvarkSeoTags extends Tags
      */
     public function body()
     {
-        $data = PageDataParser::getData(collect($this->context));
 
+        // Check if $this->ctx is not set. If not, initialise it with the current context.
+        if (!$this->ctx) {
+            $this->ctx = collect($this->context);
+        }
+
+        // Check if $this->ctxParsed is not set. If not, parse $this->ctx using PageDataParser
+        // and store the result in $this->ctxParsed for reuse.
+        if (!$this->ctxParsed) {
+            $this->ctxParsed = PageDataParser::getData($this->ctx);
+        }
+
+        $data = $this->ctxParsed;
+
+        // Check the version of Statamic Antlers. If it's 'regex', use the Laravel view helper,
+        // else use the Statamic View facade. Also, ensure $data is an array when passing it to the view.
         if (config('statamic.antlers.version') == 'regex') {
-            $view = view('aardvark-seo::tags.body', $data);
+            $view = $data instanceof \Illuminate\Support\Collection ?
+                view('aardvark-seo::tags.body', $data->all()) :
+                view('aardvark-seo::tags.body', $data);
         } else {
             $view = View::make('aardvark-seo::tags.body', $data->all());
         }
@@ -67,10 +107,26 @@ class AardvarkSeoTags extends Tags
      */
     public function footer()
     {
-        $data = PageDataParser::getData(collect($this->context));
 
+        // Check if $this->ctx is not set. If not, initialise it with the current context.
+        if (!$this->ctx) {
+            $this->ctx = collect($this->context);
+        }
+
+        // Check if $this->ctxParsed is not set. If not, parse $this->ctx using PageDataParser
+        // and store the result in $this->ctxParsed for reuse.
+        if (!$this->ctxParsed) {
+            $this->ctxParsed = PageDataParser::getData($this->ctx);
+        }
+
+        $data = $this->ctxParsed;
+
+        // Check the version of Statamic Antlers. If it's 'regex', use the Laravel view helper,
+        // else use the Statamic View facade. Also, ensure $data is an array when passing it to the view.
         if (config('statamic.antlers.version') == 'regex') {
-            $view = view('aardvark-seo::tags.footer', $data);
+            $view = $data instanceof \Illuminate\Support\Collection ?
+                view('aardvark-seo::tags.footer', $data->all()) :
+                view('aardvark-seo::tags.footer', $data);
         } else {
             $view = View::make('aardvark-seo::tags.footer', $data->all());
         }
@@ -83,7 +139,13 @@ class AardvarkSeoTags extends Tags
      */
     public function hreflang()
     {
-        $ctx = collect($this->context);
+
+        // Check if $this->ctx is not set. If not, initialise it with the current context.
+        if (!$this->ctx) {
+            $this->ctx = collect($this->context);
+        }
+
+        $ctx = $this->ctx;
 
         $id = $ctx->get('id');
 
@@ -142,7 +204,13 @@ class AardvarkSeoTags extends Tags
      */
     public function graph()
     {
-        $ctx = collect($this->context);
+
+        // Check if $this->ctx is not set. If not, initialise it with the current context.
+        if (!$this->ctx) {
+            $this->ctx = collect($this->context);
+        }
+
+        $ctx = $this->ctx;
         $graph = new SchemaGraph($ctx);
         return $graph->build();
     }
@@ -154,7 +222,19 @@ class AardvarkSeoTags extends Tags
      */
     public function socials()
     {
-        $data = PageDataParser::getData(collect($this->context));
+
+        // Check if $this->ctx is not set. If not, initialise it with the current context.
+        if (!$this->ctx) {
+            $this->ctx = collect($this->context);
+        }
+
+        // Check if $this->ctxParsed is not set. If not, parse $this->ctx using PageDataParser
+        // and store the result in $this->ctxParsed for reuse.
+        if (!$this->ctxParsed) {
+            $this->ctxParsed = PageDataParser::getData($this->ctx);
+        }
+
+        $data = $this->ctxParsed;
         $socials = $data->get('aardvark_social_settings')->get('social_links');
         if ($socials->raw()) {
             return $this->parseLoop($socials->raw());
@@ -170,7 +250,13 @@ class AardvarkSeoTags extends Tags
      */
     public function robotsTag()
     {
-        $ctx = collect($this->context);
+
+        // Check if $this->ctx is not set. If not, initialise it with the current context.
+        if (!$this->ctx) {
+            $this->ctx = collect($this->context);
+        }
+
+        $ctx = $this->ctx;
         $attrs = [];
 
         $global_no_index = $ctx->get('aardvark_general_settings')['no_index_site'];
@@ -199,7 +285,13 @@ class AardvarkSeoTags extends Tags
      */
     public function generatedCanonical()
     {
-        $data = collect($this->context);
+
+        // Check if $this->ctx is not set. If not, initialise it with the current context.
+        if (!$this->ctx) {
+            $this->ctx = collect($this->context);
+        }
+
+        $data = $this->ctx;
         $vars = $data->get('get');
         $current_url = $data->get('permalink');
         if ($vars && $page = collect($vars)->get('page')) {
