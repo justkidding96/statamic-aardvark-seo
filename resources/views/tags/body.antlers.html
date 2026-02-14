@@ -1,3 +1,3 @@
 {{ if aardvark_marketing_settings:enable_gtm_script && aardvark_marketing_settings:gtm_identifier }}
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ aardvark_marketing_settings:gtm_identifier }}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ aardvark_marketing_settings:gtm_identifier | entities }}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 {{ /if }}

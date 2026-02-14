@@ -125,6 +125,8 @@ class PageDataParser
             'aardvark_general_settings' => self::getSettingsBlueprintWithValues($ctx, 'general', new GeneralSettingsBlueprint()),
             'aardvark_marketing_settings' => self::getSettingsBlueprintWithValues($ctx, 'marketing', new MarketingSettingsBlueprint()),
             'aardvark_social_settings' => self::getSettingsBlueprintWithValues($ctx, 'social', new SocialSettingsBlueprint()),
+            'disable_favicons' => config('aardvark-seo.disable_favicons', false),
+            'disable_default_schema' => config('aardvark-seo.disable_default_schema', false),
         ];
 
         return $data->merge($populated);
@@ -167,6 +169,17 @@ class PageDataParser
         }
 
         $storage = self::getSettingsBlueprintWithValues($ctx, 'general', new GeneralSettingsBlueprint());
+
+        $titleOrder = $storage->get('title_order');
+        $titleOrderValue = $titleOrder instanceof \Statamic\Fields\Value ? $titleOrder->raw() : $titleOrder;
+
+        if ($titleOrderValue === 'site_first') {
+            return implode(' ', [
+                $storage->get('site_name'),
+                $storage->get('title_separator'),
+                $data->get('title'),
+            ]);
+        }
 
         return implode(' ', [
             $data->get('title'),

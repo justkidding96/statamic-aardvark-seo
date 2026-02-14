@@ -21,6 +21,7 @@ class AardvarkSeoMetaTitleFieldtype extends Fieldtype
         return [
             'site_name' => $data->get('site_name', ''),
             'title_separator' => $data->get('title_separator', '|'),
+            'title_order' => $data->get('title_order', 'title_first'),
             'title_max_length' => config('aardvark-seo.title_max_length', 70),
         ];
     }

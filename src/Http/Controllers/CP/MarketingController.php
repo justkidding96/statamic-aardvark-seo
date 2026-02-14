@@ -2,7 +2,6 @@
 
 namespace Justkidding96\AardvarkSeo\Http\Controllers\CP;
 
-use Statamic\CP\Breadcrumbs;
 use Statamic\Facades\Site;
 use Justkidding96\AardvarkSeo\Blueprints\CP\MarketingSettingsBlueprint;
 use Justkidding96\AardvarkSeo\Events\AardvarkGlobalsUpdated;
@@ -16,22 +15,12 @@ class MarketingController extends Controller implements Publishable
         $this->authorize('view aardvark marketing settings');
 
         $data = $this->getData();
-
         $blueprint = $this->getBlueprint();
-        $fields = $blueprint->fields()->addValues($data)->preProcess();
 
-        $crumbs = Breadcrumbs::make([
-            ['text' => 'Aardvark SEO', 'url' => url(config('statamic.cp.route') . '/aardvark-seo/settings')],
-            ['text' => 'Marketing Settings', 'url' => url(config('statamic.cp.route') . '/aardvark-seo/settings/marketing')],
-        ]);
-
-        return view('aardvark-seo::cp.settings.marketing', [
-            'blueprint' => $blueprint->toPublishArray(),
-            'crumbs' => $crumbs,
-            'meta' => $fields->meta(),
-            'title' => 'Marketing Settings | Aardvark SEO',
-            'values' => $fields->values(),
-        ]);
+        return \Statamic\CP\PublishForm::make($blueprint)
+            ->title('Marketing Settings')
+            ->values($data)
+            ->submittingTo(cp_route('aardvark-seo.marketing.store'), 'POST');
     }
 
     public function store(\Illuminate\Http\Request $request)

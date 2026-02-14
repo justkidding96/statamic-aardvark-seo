@@ -1,51 +1,70 @@
 <template>
-    <div class="meta-field-validator__outer">
-        <div class="meta-field-validator__field-container">
-            <textarea :value="value" @input="update($event.target.value)" @keyup="handleKeyUp" :name="name" :id="id" :placeholder="generatePlaceholder()" class="input-text" style="overflow-x:hidden;overflow-wrap:break-word;resize:none"></textarea>
-            <progress :max="meta.description_max_length" :value="contentLength" :class="'meta-field-validator__progress meta-field-validator__progress--' + validation.step" />
+    <div>
+        <ui-textarea
+            :model-value="value"
+            @update:model-value="update"
+            :placeholder="placeholder"
+            :id="id"
+            :read-only="isReadOnly"
+            :rows="3"
+            resize="none"
+        />
+        <div class="mt-2 flex items-center gap-2">
+            <div class="h-1 flex-1 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+                <div
+                    class="h-full rounded-full transition-all duration-200"
+                    :class="progressBarClass"
+                    :style="{ width: progressWidth }"
+                />
+            </div>
+            <span class="shrink-0 text-xs tabular-nums" :class="remainingClass">{{ remaining }}</span>
         </div>
-        <span class="meta-field-validator__caption" v-html="validation.caption"></span>
+        <p class="mt-1 text-xs text-gray-600 dark:text-gray-400" v-html="validation.caption" />
     </div>
 </template>
 
 <script>
-    import MetaDataAnalyser from './mixins/MetaDataAnalyser.vue';
+import Fieldtype from './mixins/Fieldtype.js';
 
-    export default {
-        mixins: [Fieldtype, MetaDataAnalyser],
+export default {
+    mixins: [Fieldtype],
 
-        methods: {
-            generatePlaceholder() {
-                return this.config.placeholder || "No meta description has been set for this page, search engines will use a relevent body of text from the page content instead.";
-            },
-            validateMeta(length) {
-                let validation;
-                switch (true) {
-                    case length === 0:
-                    validation = {
-                        step: "valid",
-                        caption: "You have not set a meta description for this page."
-                    };
-                    break;
-                    case length < 50:
-                    validation = {
-                        step: "warn",
-                        caption: "Your meta description could be longer."
-                    };
-                    break;
-                    case length >= 20 && length <= this.meta.description_max_length:
-                    validation = { step: "valid", caption: "Your meta description is a good length." };
-                    break;
-                    case length > this.meta.description_max_length:
-                    validation = {
-                        step: "err",
-                        caption:
-                        `Your meta description is too long, <strong>the ideal length is between 50 and ${this.meta.description_max_length} characters.</strong>`
-                    };
-                    break;
-                }
-                return validation;
-            }
-        }
-    }
+    computed: {
+        contentLength() {
+            return typeof this.value === 'string' ? this.value.length : 0;
+        },
+
+        placeholder() {
+            return this.config.placeholder || 'No meta description has been set for this page, search engines will use relevant body text instead.';
+        },
+
+        validation() {
+            const length = this.contentLength;
+
+            if (length === 0) return { step: 'valid', caption: 'No meta description set for this page.' };
+            if (length < 50) return { step: 'warn', caption: 'Your meta description could be longer.' };
+            if (length <= this.meta.description_max_length) return { step: 'valid', caption: 'Your meta description is a good length.' };
+            return { step: 'err', caption: `Your meta description is too long. <strong>Ideal length is 50–${this.meta.description_max_length} characters.</strong>` };
+        },
+
+        progressWidth() {
+            if (!this.meta.description_max_length || this.contentLength === 0) return '0%';
+            return Math.min((this.contentLength / this.meta.description_max_length) * 100, 100) + '%';
+        },
+
+        progressBarClass() {
+            return { valid: 'bg-green-500', warn: 'bg-orange-400', err: 'bg-red-500' }[this.validation.step];
+        },
+
+        remaining() {
+            return (this.meta.description_max_length || 0) - this.contentLength;
+        },
+
+        remainingClass() {
+            if (this.remaining < 0) return 'text-red-500';
+            if (this.remaining < 10) return 'text-orange-400';
+            return 'text-gray-500 dark:text-gray-400';
+        },
+    },
+};
 </script>

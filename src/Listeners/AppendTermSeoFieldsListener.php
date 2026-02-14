@@ -23,15 +23,10 @@ class AppendTermSeoFieldsListener implements SeoFieldsListener
 
         $handle = $event->blueprint->namespace();
         if ($this->check_content_type($handle)) {
-            $fields = OnPageSeoBlueprint::requestBlueprint()
-                ->fields()
-                ->items()
-                ->mapWithKeys(fn (array $field) => [$field['handle'] => $field['field']]);
-
-            $event->blueprint->ensureFieldsInTab(
-                $fields,
-                'SEO'
-            );
+            // Add SEO tab with sectioned card panels
+            $contents = $event->blueprint->contents();
+            $contents['tabs']['SEO'] = ['sections' => OnPageSeoBlueprint::seoTabSections()];
+            $event->blueprint->setContents($contents);
         }
     }
 

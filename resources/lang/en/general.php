@@ -10,26 +10,35 @@ return [
 
     'fields' => [
         'titles_section' => [
-            'display' => 'Titles',
+            'display' => 'Title',
             'instruct' => 'Control how your site titles appear',
         ],
+        'title_order' => [
+            'display' => 'Order',
+            'instruct' => 'Choose the order of the page title and site name in the meta title.',
+            'options' => [
+                'title_first' => 'Page Title | Site Name',
+                'site_first' => 'Site Name | Page Title',
+            ],
+        ],
         'title_separator' => [
-            'display' => 'Title Separator',
+            'display' => 'Separator',
             'instruct' => 'Set the character to separate the site and page names in the meta title'
         ],
         'site_name' => [
-            'display' => 'Website Name',
-            'instruct' => 'Set the name for the website. This will be used in generated meta titles as well as the OpenGraph site name property'
+            'display' => 'Name',
+            'instruct' => 'This will be used in generated meta titles as well as the OpenGraph site name property'
         ],
         'favicon_section' => [
             'display' => 'Favicon',
-            'instruct' => 'Upload a favicon to show in search results and the browser. It is recommended that your favicon is:<ul><li>A multiple of 48px square in dimensions</li><li>A supported favicon file format, we recommend using `.png`</li></ul>'
+            'instruct' => 'Upload a favicon to show in search results and the browser.'
         ],
         'global_favicon' => [
             'display' => 'Global Favicon',
+            'instruct' => 'Use a supported favicon file format (`.png`) in a square size that’s a multiple of 48px.',
         ],
         'knowledge_graph_section' => [
-            'display' => 'Base Knowledge Graph Data',
+            'display' => 'Structured Data',
         ],
         'company_or_person' => [
             'display' => 'Company or Person?',
@@ -44,21 +53,21 @@ return [
         ],
         'breadcrumbs_section' => [
             'display' => 'Breadcrumbs',
-            'instruct' => 'Enable breadcrumbs schema for pages (see [https://developers.google.com/search/docs/data-types/breadcrumb](https://developers.google.com/search/docs/data-types/breadcrumb)).',
+            'instruct' => 'See [https://developers.google.com/search/docs/data-types/breadcrumb](https://developers.google.com/search/docs/data-types/breadcrumb) for more information.',
         ],
         'enable_breadcrumbs' => [
-            'display' => 'Enable Breadcrumbs?',
+            'display' => 'Enabled',
         ],
         'no_index_section' => [
-            'display' => 'No Index',
-            'instruct' => 'Set to `true` to exclude the **whole site** from search engine indexing - this can also be configured on a per-page basis.',
+            'display' => 'Indexing',
+            'instruct' => 'Prevent indexing across the entire site.',
         ],
         'no_index_site' => [
             'display' => 'No Index',
-            'instruct' => 'Prevent indexing across the entire site.',
+            'instruct' => 'Set to `true` to exclude the **whole site** from search engine indexing - this can also be configured on a per-page basis.',
         ],
         'default_locale_section' => [
-            'display' => 'Default Locale',
+            'display' => 'Locale',
             'instruct' => 'Select a locale to use as a default hreflang tag (see [https://developers.google.com/search/blog/2013/04/x-default-hreflang-for-international-pages](https://developers.google.com/search/blog/2013/04/x-default-hreflang-for-international-pages)).',
         ],
         'default_locale' => [

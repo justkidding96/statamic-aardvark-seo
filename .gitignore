@@ -5,3 +5,4 @@ vendor
 .antlers.json
 resources/dist/hot
 .idea/
+composer.lock

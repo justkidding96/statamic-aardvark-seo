@@ -2,7 +2,6 @@
 
 namespace Justkidding96\AardvarkSeo\Http\Controllers\CP;
 
-use Statamic\CP\Breadcrumbs;
 use Statamic\Facades\Site;
 use Justkidding96\AardvarkSeo\Blueprints\CP\SocialSettingsBlueprint;
 use Justkidding96\AardvarkSeo\Facades\AardvarkStorage;
@@ -16,22 +15,12 @@ class SocialController extends Controller implements Publishable
         $this->authorize('view aardvark social settings');
 
         $data = $this->getData();
-
         $blueprint = $this->getBlueprint();
-        $fields = $blueprint->fields()->addValues($data)->preProcess();
 
-        $crumbs = Breadcrumbs::make([
-            ['text' => 'Aardvark SEO', 'url' => url(config('statamic.cp.route') . '/aardvark-seo/settings')],
-            ['text' => 'Social Settings', 'url' => url(config('statamic.cp.route') . '/aardvark-seo/settings/social')],
-        ]);
-
-        return view('aardvark-seo::cp.settings.social', [
-            'blueprint' => $blueprint->toPublishArray(),
-            'crumbs' => $crumbs,
-            'meta' => $fields->meta(),
-            'title' => 'Social Settings | Aardvark SEO',
-            'values' => $fields->values(),
-        ]);
+        return \Statamic\CP\PublishForm::make($blueprint)
+            ->title('Social Settings')
+            ->values($data)
+            ->submittingTo(cp_route('aardvark-seo.social.store'), 'POST');
     }
 
     public function store(\Illuminate\Http\Request $request)

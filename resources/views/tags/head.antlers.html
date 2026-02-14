@@ -3,19 +3,19 @@
 <!-- End robots content -->
 
 <!-- Start page content -->
-    <title>{{ calculated_title }}</title>
+    <title>{{ calculated_title | entities }}</title>
 {{ if meta_description }}
-    <meta name="description" content="{{ meta_description }}">
+    <meta name="description" content="{{ meta_description | entities }}">
 {{ /if }}
 {{ if use_meta_keywords }}
-    <meta name="keywords" content="{{ meta_keywords | join  }}">
+    <meta name="keywords" content="{{ meta_keywords | join | entities }}">
 {{ /if }}
 <!-- End page content -->
 
 <!-- Start urls content -->
 {{ if canonical_url }}
-    <link rel="canonical" href="{{ canonical_url }}">
-    <meta property="og:url" content="{{ canonical_url }}">
+    <link rel="canonical" href="{{ canonical_url | entities }}">
+    <meta property="og:url" content="{{ canonical_url | entities }}">
 {{ else }}
     <link rel="canonical" href="{{ aardvark-seo:generated_canonical }}">
     <meta property="og:url" content="{{ aardvark-seo:generated_canonical }}">
@@ -31,6 +31,7 @@
 {{ /if }}
 <!-- End hreflang content -->
 
+{{ unless disable_favicons }}
 <!-- Start favicon content -->
 {{ if aardvark_general_settings:global_favicon }}
     {{ aardvark_general_settings:global_favicon }}
@@ -38,67 +39,74 @@
     {{ /aardvark_general_settings:global_favicon }}
 {{ /if }}
 <!-- End favicon content -->
+{{ /unless }}
 
 <!-- Start OpenGraph content -->
-    <meta property="og:site_name" content="{{ aardvark_general_settings:site_name }}">
-    <meta property="og:title" content="{{ og_title or calculated_title }}">
-    <meta property="og:description" content="{{ og_description or meta_description }}">
+    <meta property="og:site_name" content="{{ aardvark_general_settings:site_name | entities }}">
+    <meta property="og:title" content="{{ og_title or calculated_title | entities }}">
+    <meta property="og:description" content="{{ og_description or meta_description | entities }}">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="{{ site:locale | aardvark_parse_locale }}">
     {{ if calculated_og_image }}
     {{ calculated_og_image }}
-    <meta property="og:image" content="{{ permalink }}">
-    <meta property="og:image:width" content="{{ width }}">
-    <meta property="og:image:height" content="{{ height }}">
-    <meta property="og:image:alt" content="{{ alt }}">
+    {{ glide :src="id" width="1200" height="630" fit="crop_focal" }}
+    <meta property="og:image" content="{{ url }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    {{ /glide }}
+    <meta property="og:image:alt" content="{{ alt | entities }}">
     {{ /calculated_og_image }}
     {{ /if }}
 <!-- End OpenGraph content -->
 
 <!-- Start Twitter content -->
 {{ if override_twitter_settings && twitter_title }}
-    <meta name="twitter:title" content="{{ twitter_title }}">
+    <meta name="twitter:title" content="{{ twitter_title | entities }}">
 {{ /if }}
 {{ if override_twitter_settings && twitter_description }}
-    <meta name="twitter:description" content="{{ twitter_description }}">
+    <meta name="twitter:description" content="{{ twitter_description | entities }}">
 {{ /if }}
-    <meta name="twitter:card" content="{{ calculated_twitter_card_type or 'summary' }}">
+    <meta name="twitter:card" content="{{ calculated_twitter_card_type or 'summary' | entities }}">
 {{ if calculated_twitter_image }}
 {{ calculated_twitter_image }}
-    <meta name="twitter:image" content="{{ permalink }}">
+    {{ glide :src="id" width="1200" height="630" fit="crop_focal" }}
+    <meta name="twitter:image" content="{{ url }}">
+    {{ /glide }}
 {{ /calculated_twitter_image }}
 {{ /if }}
 {{ if aardvark_social_settings:twitter_username }}
-    <meta name="twitter:site" content="{{ aardvark_social_settings:twitter_username ensure_left='@' }}">
-    <meta name="twitter:creator" content="{{ aardvark_social_settings:twitter_username ensure_left='@' }}">
+    <meta name="twitter:site" content="{{ aardvark_social_settings:twitter_username ensure_left='@' | entities }}">
+    <meta name="twitter:creator" content="{{ aardvark_social_settings:twitter_username ensure_left='@' | entities }}">
 {{ /if }}
 <!-- End Twitter content -->
 
 <!-- Start marketing content -->
 {{ if aardvark_marketing_settings:enable_gtm_script && aardvark_marketing_settings:gtm_identifier }}
-<script>(function (w, d, s, l, i){w[l]=w[l] || []; w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'}); var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l !='dataLayer' ? '&l=' + l : ''; j.async=true; j.src='https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);})(window, document, 'script', 'dataLayer', '{{ aardvark_marketing_settings:gtm_identifier }}');</script>
+<script>(function (w, d, s, l, i){w[l]=w[l] || []; w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'}); var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l !='dataLayer' ? '&l=' + l : ''; j.async=true; j.src='https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);})(window, document, 'script', 'dataLayer', '{{ aardvark_marketing_settings:gtm_identifier | entities }}');</script>
 {{ /if }}
 
 {{ if aardvark_marketing_settings:google_verification_code }}
-<meta name="google-site-verification" content="{{ aardvark_marketing_settings:google_verification_code }}">
+<meta name="google-site-verification" content="{{ aardvark_marketing_settings:google_verification_code | entities }}">
 {{ /if }}
 
 {{ if aardvark_marketing_settings:bing_verification_code }}
-<meta name="msvalidate.01" content="{{ aardvark_marketing_settings:bing_verification_code }}">
+<meta name="msvalidate.01" content="{{ aardvark_marketing_settings:bing_verification_code | entities }}">
 {{ /if }}
 
 {{ if aardvark_marketing_settings:yandex_verification_code }}
-<meta name="yandex-verification" content="{{ aardvark_marketing_settings:yandex_verification_code }}">
+<meta name="yandex-verification" content="{{ aardvark_marketing_settings:yandex_verification_code | entities }}">
 {{ /if }}
 
 {{ if aardvark_marketing_settings:baidu_verification_code }}
-<meta name="baidu-site-verification" content="{{ aardvark_marketing_settings:baidu_verification_code }}">
+<meta name="baidu-site-verification" content="{{ aardvark_marketing_settings:baidu_verification_code | entities }}">
 {{ /if }}
 <!-- End marketing content -->
 
+{{ unless disable_default_schema }}
 <!-- Start aardvark schema generation -->
 {{ aardvark-seo:graph }}
 <!-- End aardvark schema generation -->
+{{ /unless }}
 
 <!-- Start schema content -->
 {{ if schema_objects }}

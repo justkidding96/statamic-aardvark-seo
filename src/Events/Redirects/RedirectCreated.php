@@ -5,7 +5,7 @@ namespace Justkidding96\AardvarkSeo\Events\Redirects;
 use Statamic\Events\Event;
 use Statamic\Contracts\Git\ProvidesCommitMessage;
 
-class ManualRedirectCreated extends Event implements ProvidesCommitMessage
+class RedirectCreated extends Event implements ProvidesCommitMessage
 {
     public $redirect;
 
@@ -19,6 +19,6 @@ class ManualRedirectCreated extends Event implements ProvidesCommitMessage
      */
     public function commitMessage()
     {
-        return 'Aardvark manual redirect created';
+        return 'Aardvark redirect created';
     }
 }

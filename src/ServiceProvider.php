@@ -14,9 +14,9 @@ use Statamic\Providers\AddonServiceProvider;
 use Justkidding96\AardvarkSeo\Blueprints\CP\OnPageSeoBlueprint;
 use Justkidding96\AardvarkSeo\Events\AardvarkContentDefaultsSaved;
 use Justkidding96\AardvarkSeo\Events\AardvarkGlobalsUpdated;
-use Justkidding96\AardvarkSeo\Events\Redirects\ManualRedirectCreated;
-use Justkidding96\AardvarkSeo\Events\Redirects\ManualRedirectDeleted;
-use Justkidding96\AardvarkSeo\Events\Redirects\ManualRedirectSaved;
+use Justkidding96\AardvarkSeo\Events\Redirects\RedirectCreated;
+use Justkidding96\AardvarkSeo\Events\Redirects\RedirectDeleted;
+use Justkidding96\AardvarkSeo\Events\Redirects\RedirectSaved;
 use Justkidding96\AardvarkSeo\Fieldtypes\AardvarkSeoMetaTitleFieldtype;
 use Justkidding96\AardvarkSeo\Fieldtypes\AardvarkSeoMetaDescriptionFieldtype;
 use Justkidding96\AardvarkSeo\Fieldtypes\AardvarkSeoGooglePreviewFieldtype;
@@ -48,11 +48,7 @@ class ServiceProvider extends AddonServiceProvider
         ],
     ];
 
-    protected $middlewareGroups = [
-        'statamic.web' => [
-            RedirectsMiddleware::class,
-        ],
-    ];
+    protected $middlewareGroups = [];
 
     protected $modifiers = [
         ParseLocaleModifier::class,
@@ -81,6 +77,14 @@ class ServiceProvider extends AddonServiceProvider
 
     public function boot()
     {
+        if (! config('aardvark-seo.disable_redirects')) {
+            $this->middlewareGroups = [
+                'statamic.web' => [
+                    RedirectsMiddleware::class,
+                ],
+            ];
+        }
+
         parent::boot();
 
         // Set up views path
@@ -117,16 +121,14 @@ class ServiceProvider extends AddonServiceProvider
     {
         $routeCollection = Route::getRoutes();
 
-        // Add SEO item to nav
+        // Add Aardvark SEO item to nav
         Nav::extend(function ($nav) {
-            // Top level SEO item
-            $nav->create('SEO')
+            $nav->create('Aardvark SEO')
                 ->can('configure aardvark settings')
                 ->section('Tools')
                 ->route('aardvark-seo.settings')
-                ->icon('seo-search-graph')
-                ->children([
-                    // Settings categories
+                ->icon('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M1.012 11.942a8.5 8.5 0 0 1 15.022-7.685M15.01 15.041l2.333 2.332M23 20.909a1.5 1.5 0 1 1-2.121 2.121l-3.889-3.889a1 1 0 0 1 0-1.414l.707-.707a1 1 0 0 1 1.414 0z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m.5 15.53 8.793-8.793a1 1 0 0 1 1.414 0l2.586 2.586a1 1 0 0 0 1.414 0L23.5.53"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M20.5.53h3v3m-6.015 6.016a8.5 8.5 0 0 1-13.923 6.017"/></svg>')
+                ->children(array_filter([
                     $nav->item(__('aardvark-seo::general.index'))
                         ->route('aardvark-seo.general.index')
                         ->can('view aardvark general settings'),
@@ -142,18 +144,10 @@ class ServiceProvider extends AddonServiceProvider
                     $nav->item(__('aardvark-seo::sitemap.singular'))
                         ->route('aardvark-seo.sitemap.index')
                         ->can('view aardvark sitemap settings'),
-                ]);
-
-            $nav->create(__('aardvark-seo::redirects.plural'))
-                ->can('view aardvark redirects')
-                ->section('Tools')
-                ->route('aardvark-seo.redirects.index')
-                ->icon('<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M16 8.093V4a1 1 0 00-1-1H2a1 1 0 00-1 1v10a1 1 0 001 1h7.129m6.458-9.337h-14.5m2.595-2.198v2m2.55-2.079v2M12.01 19.16v-3.35a3.878 3.878 0 013.878-3.879h1.566m-1.439-1.688l2.043 1.637m-.01.063l-2.043 1.637" stroke="currentColor" stroke-width=".75" fill="none" fill-rule="evenodd" stroke-linecap="round"/></svg>')
-                ->children([
-                    $nav->item(__('aardvark-seo::redirects.manual.plural'))
-                        ->can('view aardvark redirects')
-                        ->route('aardvark-seo.redirects.manual-redirects.index'),
-                ]);
+                    ! config('aardvark-seo.disable_redirects') ? $nav->item(__('aardvark-seo::redirects.plural'))
+                        ->route('aardvark-seo.redirects.index')
+                        ->can('view aardvark redirects') : null,
+                ]));
         });
     }
 
@@ -189,30 +183,25 @@ class ServiceProvider extends AddonServiceProvider
 
         Permission::group('aardvark-seo', 'Aardvark SEO', function () use ($settings_groups) {
             Permission::register('configure aardvark settings', function ($permission) use ($settings_groups) {
-                $permission->children([
-                    Permission::make('view aardvark {settings_group} settings')
-                        ->replacements('settings_group', function () use ($settings_groups) {
-                            return collect($settings_groups)->map(function ($group) {
-                                return [
-                                    'value' => $group['value'],
-                                    'label' => $group['label'],
-                                ];
-                            });
-                        })
-                        ->label('View :settings_group Settings')
+                $children = collect($settings_groups)->map(function ($group) {
+                    return Permission::make("view aardvark {$group['value']} settings")
+                        ->label("View {$group['label']} Settings")
                         ->children([
-                            Permission::make('update aardvark {settings_group} settings')
-                                ->label('Update :settings_group Settings'),
-                        ]),
-                    Permission::make('view aardvark redirects')
-                        ->label(__('aardvark-seo::redirects.permissions.view'))
-                        ->children([
-                            Permission::make('edit aardvark redirects')
-                                ->label(__('aardvark-seo::redirects.permissions.edit')),
-                            Permission::make('create aardvark redirects')
-                                ->label(__('aardvark-seo::redirects.permissions.create')),
-                        ]),
-                ]);
+                            Permission::make("update aardvark {$group['value']} settings")
+                                ->label("Update {$group['label']} Settings"),
+                        ]);
+                })->all();
+
+                $children[] = Permission::make('view aardvark redirects')
+                    ->label(__('aardvark-seo::redirects.permissions.view'))
+                    ->children([
+                        Permission::make('edit aardvark redirects')
+                            ->label(__('aardvark-seo::redirects.permissions.edit')),
+                        Permission::make('create aardvark redirects')
+                            ->label(__('aardvark-seo::redirects.permissions.create')),
+                    ]);
+
+                $permission->children($children);
             })->label('Configure Aardvark Settings');
         });
     }
@@ -228,9 +217,9 @@ class ServiceProvider extends AddonServiceProvider
             $events = [
                 AardvarkContentDefaultsSaved::class,
                 AardvarkGlobalsUpdated::class,
-                ManualRedirectCreated::class,
-                ManualRedirectDeleted::class,
-                ManualRedirectSaved::class,
+                RedirectCreated::class,
+                RedirectDeleted::class,
+                RedirectSaved::class,
             ];
 
             foreach ($events as $event) {

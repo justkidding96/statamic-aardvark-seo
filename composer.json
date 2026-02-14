@@ -1,7 +1,7 @@
 {
     "name": "justkidding96/aardvark-seo",
     "description": "Save time and get your Statamic site to rank better with the SEO addon for Statamic.",
-    "version": "5.1.0",
+    "version": "6.0.0",
     "type": "statamic-addon",
     "keywords": [
         "Statamic",
@@ -43,7 +43,7 @@
     },
     "require": {
         "spatie/schema-org": "^3.2",
-        "statamic/cms": "^5.0",
+        "statamic/cms": "^6.0",
         "whitecube/lingua": "^1.0"
     },
     "config": {

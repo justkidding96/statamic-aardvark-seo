@@ -22,13 +22,15 @@ class RedirectsMiddleware
             // Remove the current site root from the request
             $path = Str::removeLeft(Str::ensureLeft($request->path(), '/'), $site_root);
 
-            // Ensure we have a leading slash
+            // Ensure we have a leading slash and normalize trailing slash
             $source_url = Str::ensureLeft($path, '/');
+            $source_url_trimmed = rtrim($source_url, '/') ?: '/';
 
-            // First check the manual redirects
-            $manual_repository = $this->getManualRedirectsRepository();
-            if ($manual_repository->sourceExists($source_url)) {
-                $redirect = $manual_repository->getBySource($source_url);
+            // Check the redirects (try both with and without trailing slash)
+            $repository = $this->getRedirectsRepository();
+            if ($repository->sourceExists($source_url) || $repository->sourceExists($source_url_trimmed)) {
+                $source_url = $repository->sourceExists($source_url) ? $source_url : $source_url_trimmed;
+                $redirect = $repository->getBySource($source_url);
 
                 $target = $redirect['target_url'];
 
@@ -49,7 +51,7 @@ class RedirectsMiddleware
         return $response;
     }
 
-    private function getManualRedirectsRepository()
+    private function getRedirectsRepository()
     {
         return new RedirectsRepository('redirects/manual', Site::current());
     }
