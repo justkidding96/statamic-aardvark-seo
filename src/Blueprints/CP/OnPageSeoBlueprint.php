@@ -332,7 +332,7 @@ class OnPageSeoBlueprint implements AardvarkBlueprint
                             'type' => 'code',
                             'display' => __('aardvark-seo::onpage.fields.schema_objects.display'),
                             'instructions' => __('aardvark-seo::onpage.fields.schema_objects.instruct'),
-                            'mode' => 'html',
+                            'mode' => 'htmlmixed',
                             'localizable' => true,
                         ],
                     ],
