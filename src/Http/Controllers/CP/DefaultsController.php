@@ -1,64 +1,94 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Http\Controllers\CP;
+namespace Justkidding96\AardvarkSeo\Http\Controllers\CP;
 
 use Illuminate\Http\Request;
-use Statamic\CP\Breadcrumbs;
+use Statamic\CP\Column;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Site;
 use Statamic\Facades\Taxonomy;
-use WithCandour\AardvarkSeo\Blueprints\CP\DefaultsSettingsBlueprint;
-use WithCandour\AardvarkSeo\Facades\AardvarkStorage;
-use WithCandour\AardvarkSeo\Content\ContentDefaults;
-use WithCandour\AardvarkSeo\Events\AardvarkContentDefaultsSaved;
+use Justkidding96\AardvarkSeo\Blueprints\CP\DefaultsSettingsBlueprint;
+use Justkidding96\AardvarkSeo\Facades\AardvarkStorage;
+use Justkidding96\AardvarkSeo\Content\ContentDefaults;
+use Justkidding96\AardvarkSeo\Events\AardvarkContentDefaultsSaved;
 
 class DefaultsController extends Controller
 {
     /**
      * Display a list of all collections/taxonomies
      */
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize('view aardvark defaults settings');
 
-        $collections = Collection::all();
-        $taxonomies = Taxonomy::all();
         $curr_site = Site::selected();
 
-        $content_types = [
-            'Collections' => $collections
-                ->filter(function ($collection) use ($curr_site) {
-                    return $collection->sites()->contains($curr_site);
-                })
-                ->map(function ($collection) {
-                    return [
-                    'count' => $collection->queryEntries()->count(),
-                    'handle' => $collection->handle(),
+        $items = collect();
+
+        Collection::all()
+            ->filter(fn ($collection) => $collection->sites()->contains($curr_site))
+            ->each(function ($collection) use ($items) {
+                $handle = 'collections_' . $collection->handle();
+                $items->push([
+                    'id' => $handle,
                     'title' => $collection->title(),
-                ];
-                })->toArray(),
-            'Taxonomies' => $taxonomies
-                ->filter(function ($taxonomy) use ($curr_site) {
-                    return $taxonomy->sites()->contains($curr_site);
-                })
-                ->map(function ($taxonomy) {
-                    return [
-                    'count' => $taxonomy->queryTerms()->count(),
-                    'handle' => $taxonomy->handle(),
+                    'handle' => $collection->handle(),
+                    'type' => __('Collection'),
+                    'entries' => $collection->queryEntries()->count(),
+                    'edit_url' => cp_route('aardvark-seo.defaults.edit', ['default' => $handle]),
+                ]);
+            });
+
+        Taxonomy::all()
+            ->filter(fn ($taxonomy) => $taxonomy->sites()->contains($curr_site))
+            ->each(function ($taxonomy) use ($items) {
+                $handle = 'taxonomies_' . $taxonomy->handle();
+                $items->push([
+                    'id' => $handle,
                     'title' => $taxonomy->title(),
-                ];
-                })->toArray(),
+                    'handle' => $taxonomy->handle(),
+                    'type' => __('Taxonomy'),
+                    'entries' => $taxonomy->queryTerms()->count(),
+                    'edit_url' => cp_route('aardvark-seo.defaults.edit', ['default' => $handle]),
+                ]);
+            });
+
+        // Apply search filter
+        if ($search = $request->input('search')) {
+            $search = strtolower($search);
+            $items = $items->filter(fn ($item) =>
+                str_contains(strtolower($item['title']), $search) ||
+                str_contains(strtolower($item['handle']), $search) ||
+                str_contains(strtolower($item['type']), $search)
+            );
+        }
+
+        // Apply sorting
+        if ($sortColumn = $request->input('sort')) {
+            $sortDirection = $request->input('order', 'asc');
+            $items = $items->sortBy($sortColumn, SORT_REGULAR, $sortDirection === 'desc');
+        }
+
+        $columns = [
+            Column::make('title')->label(__('Title')),
+            Column::make('handle')->label(__('Handle')),
+            Column::make('type')->label(__('Type')),
+            Column::make('entries')->label(__('Entries')),
         ];
 
-        $crumbs = Breadcrumbs::make([
-            ['text' => 'Aardvark SEO', 'url' => url(config('statamic.cp.route') . '/aardvark-seo/settings')],
-            ['text' => 'Content Defaults', 'url' => url(config('statamic.cp.route') . '/aardvark-seo/settings/defaults')],
-        ]);
+        if ($request->wantsJson()) {
+            return response()->json([
+                'data' => $items->values(),
+                'meta' => [
+                    'columns' => $columns,
+                    'activeFilterBadges' => [],
+                ],
+            ]);
+        }
 
         return view('aardvark-seo::cp.settings.defaults.index', [
-            'content_types' => $content_types,
-            'crumbs' => $crumbs,
-            'title' => 'Content Defaults | Aardvark SEO',
+            'title' => __('Content Defaults'),
+            'columns' => $columns,
         ]);
     }
 
@@ -73,27 +103,13 @@ class DefaultsController extends Controller
         $this->authorize('view aardvark defaults settings');
 
         $data = $this->getData($content_type);
-
         $blueprint = $this->getBlueprint();
-        $fields = $blueprint->fields()->addValues($data)->preProcess();
-
         $repo = $this->getRepositoryFromHandle($content_type);
 
-        $crumbs = Breadcrumbs::make([
-            ['text' => 'Aardvark SEO', 'url' => url(config('statamic.cp.route') . '/aardvark-seo/settings')],
-            ['text' => 'Content Defaults', 'url' => url(config('statamic.cp.route') . '/aardvark-seo/settings/defaults')],
-            ['text' => "{$repo->title()} Defaults", 'url' => url(config('statamic.cp.route') . "/aardvark-seo/settings/defaults/{$content_type}/edit")],
-        ]);
-
-        return view('aardvark-seo::cp.settings.defaults.edit', [
-            'blueprint' => $blueprint->toPublishArray(),
-            'crumbs' => $crumbs,
-            'meta' => $fields->meta(),
-            'title' => "{$repo->title()} Defaults | Aardvark SEO",
-            'repo' => $repo,
-            'content_type' => $content_type,
-            'values' => $fields->values(),
-        ]);
+        return \Statamic\CP\PublishForm::make($blueprint)
+            ->title("{$repo->title()} Defaults")
+            ->values($data)
+            ->submittingTo(cp_route('aardvark-seo.defaults.update', ['default' => $content_type]), 'PATCH');
     }
 
     /**

@@ -4,11 +4,11 @@
 
 #### Install via composer:
 ```
-composer require withcandour/aardvark-seo
+composer require justkidding96/aardvark-seo
 ```
 Then publish the publishables from the service provider:
 ```
-php artisan vendor:publish --provider="WithCandour\AardvarkSeo\ServiceProvider"
+php artisan vendor:publish --provider="Justkidding96\AardvarkSeo\ServiceProvider"
 ```
 
 #### Install via CP
@@ -24,6 +24,11 @@ After installing, a config file will be created at `config/aardvark-seo.php`. Th
 | `custom_socials`       | Array   | An array of custom socials to add to our selector |
 | `excluded_collections` | Array   | An array of collections to exclude from adding the SEO tab |
 | `excluded_taxonomies`  | Array   | An array of taxonomies to exclude from adding the SEO tab |
+| `title_max_length`     | Integer | Maximum character length for meta titles (default: `60`) |
+| `description_max_length` | Integer | Maximum character length for meta descriptions (default: `160`) |
+| `disable_favicons`     | Boolean | Disable favicon output in the head tag (default: `false`) |
+| `disable_redirects`    | Boolean | Disable the redirects module entirely (default: `false`) |
+| `disable_default_schema` | Boolean | Disable the default schema graph output (default: `false`) |
 
 ### Tags
 
@@ -34,7 +39,6 @@ Getting your site's SEO data onto the page relies on a few tags being present in
 - `{{ aardvark-seo:footer }}` - Contains any scripts that need to be included at the end of the page, it should be placed towards the end of page along with any other scripts you have in the footer.
 
 ### Git integration
-> Heads up! This behaviour will be changing from Aardvark SEO 2.1 onwards, the following documentation is for 2.0.x only!
 Aardvark SEO integrates with the [Statamic Git functionality](https://statamic.dev/git-automation) meaning that any changes you make to the site settings, content defaults or redirects will get committed to your git repo automatically. The following steps are required to enable the git integration for Aardvark SEO:
 1. Add the Aardvark storage directory to the `paths` array in `config/statamic/git.php`.
 ```
@@ -48,6 +52,67 @@ Aardvark SEO integrates with the [Statamic Git functionality](https://statamic.d
 /*
 !.gitignore
 !/addons/aardvark-seo
+```
+
+## Upgrading
+
+### Upgrading to 6.0.0
+
+Version 6.0.0 requires **Statamic v6** (`statamic/cms: ^6.0`).
+
+#### Breaking Changes
+
+- Redirect events have been renamed: `ManualRedirectCreated`, `ManualRedirectSaved`, and `ManualRedirectDeleted` are now `RedirectCreated`, `RedirectSaved`, and `RedirectDeleted`.
+
+#### Upgrade Steps
+
+1. Update your `composer.json` to require `^6.0` of the addon
+2. Run `composer update justkidding96/aardvark-seo`
+3. Publish assets: `php artisan vendor:publish --force --tag=aardvark-seo`
+4. If you were listening to `ManualRedirectCreated`, `ManualRedirectSaved`, or `ManualRedirectDeleted` events, update your references to `RedirectCreated`, `RedirectSaved`, and `RedirectDeleted`
+5. Review the new config options in `config/aardvark-seo.php` and publish them if needed
+6. Clear your caches:
+```bash
+php artisan optimize:clear
+```
+
+### Upgrading to 5.1.0
+
+Version 5.1.0 introduces breaking changes due to a namespace change.
+
+#### Breaking Changes
+
+The package namespace has changed from `WithCandour\AardvarkSeo` to `Justkidding96\AardvarkSeo`.
+
+#### Upgrade Steps
+
+1. Update your `composer.json` to require the new package:
+```bash
+composer remove withcandour/aardvark-seo
+composer require justkidding96/aardvark-seo
+```
+
+2. Update any references to the old namespace in your code:
+```
+# Old
+WithCandour\AardvarkSeo\...
+
+# New
+Justkidding96\AardvarkSeo\...
+```
+
+3. If you have published the service provider, update the reference:
+```php
+# Old
+WithCandour\AardvarkSeo\ServiceProvider
+
+# New
+Justkidding96\AardvarkSeo\ServiceProvider
+```
+
+4. Clear your caches:
+```bash
+php artisan optimize:clear
 ```
 
 ## Permissions
@@ -66,6 +131,16 @@ Individual collections / taxonomies can be excluded from the sitemap with the se
 
 You can manage the list of redirects for your site from within the control panel, the Redirects item in the Tools section of the control panel is the place to go for this.
 
+Redirects support both 301 (permanent) and 302 (temporary) status codes, and trailing slashes are handled automatically.
+
+### CSV Import/Export
+
+You can export all redirects as a CSV file and import redirects from a CSV file. The CSV file should have the following columns: `source_url`, `target_url`, and optionally `status_code`.
+
+### Disabling Redirects
+
+The redirects module can be disabled entirely by setting `disable_redirects` to `true` in the config file. This will remove the middleware and the navigation item from the control panel.
+
 > Redirects are relative to the site URL, so subfolder multisite installations will not need the site root prepended to the redirect URLs e.g. `/redirect` rather than `/en/redirect` for a site installed at `example.com/en`
 
 ## Marketing tools
@@ -76,7 +151,11 @@ Google tag manager can be enabled and managed through the Aardvark addon, additi
 
 A new 'SEO' section will be added to the editor screen for any Pages, Collection entries or Taxonomy terms from which the SEO and share data will be managed.
 
-Special fields for the meta title and description will give you hints about the length of the content enabling you to optimize your metadata for search engines - a google search preview will help to visualise this.
+Special fields for the meta title and description include progress bars and character counters to help you optimize your metadata for search engines. A Google search preview, designed to match the look of actual search results, will help to visualise how your page will appear in search.
+
+### Title Order
+
+You can configure whether the page title appears before or after the site name (e.g. "Page Title | Site Name" vs "Site Name | Page Title") under SEO > General.
 
 ### Disable
 You can prevent the SEO tab from appearing by adding the handle of the collection/term to the `excluded_collections` or `excluded_taxonomies` array in the Aardvark config file.
@@ -88,6 +167,8 @@ Site indexing can be controlled either at the site-level (crawlers will not inde
 ## Schema
 
 A schema graph will be generated for each page which will pull data from the Aardvark global settings including things like the Organization and social media profiles linked to the website, additionally WebSite and WebPage schema will be generated automatically.
+
+The default schema output can be disabled by setting `disable_default_schema` to `true` in the config file. Custom schema can still be added per-page using the schema code editor field.
 
 ### Breadcrumbs
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Modifiers;
+namespace Justkidding96\AardvarkSeo\Modifiers;
 
 use Statamic\Modifiers\Modifier;
 use WhiteCube\Lingua\Service as Lingua;

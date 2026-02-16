@@ -1,15 +1,15 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Schema\Parts;
+namespace Justkidding96\AardvarkSeo\Schema\Parts;
 
 use Carbon\Carbon;
 use Spatie\SchemaOrg\Schema;
 use Statamic\Facades\Config;
 use Statamic\Facades\URL;
-use WithCandour\AardvarkSeo\Modifiers\ParseLocaleModifier;
-use WithCandour\AardvarkSeo\Schema\SchemaIds;
-use WithCandour\AardvarkSeo\Schema\Parts\WebSite;
-use WithCandour\AardvarkSeo\Schema\Parts\Contracts\SchemaPart;
+use Justkidding96\AardvarkSeo\Modifiers\ParseLocaleModifier;
+use Justkidding96\AardvarkSeo\Schema\SchemaIds;
+use Justkidding96\AardvarkSeo\Schema\Parts\WebSite;
+use Justkidding96\AardvarkSeo\Schema\Parts\Contracts\SchemaPart;
 
 class WebPage implements SchemaPart
 {

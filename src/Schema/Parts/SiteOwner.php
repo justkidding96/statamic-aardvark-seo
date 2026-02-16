@@ -1,15 +1,15 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Schema\Parts;
+namespace Justkidding96\AardvarkSeo\Schema\Parts;
 
 use Spatie\SchemaOrg\Schema;
 use Statamic\Facades\Asset;
 use Statamic\Facades\Config;
 use Statamic\Facades\Site;
 use Statamic\Facades\URL;
-use WithCandour\AardvarkSeo\Facades\AardvarkStorage;
-use WithCandour\AardvarkSeo\Schema\SchemaIds;
-use WithCandour\AardvarkSeo\Schema\Parts\Contracts\SchemaPart;
+use Justkidding96\AardvarkSeo\Facades\AardvarkStorage;
+use Justkidding96\AardvarkSeo\Schema\SchemaIds;
+use Justkidding96\AardvarkSeo\Schema\Parts\Contracts\SchemaPart;
 
 class SiteOwner implements SchemaPart
 {

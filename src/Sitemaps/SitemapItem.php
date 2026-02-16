@@ -1,6 +1,6 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Sitemaps;
+namespace Justkidding96\AardvarkSeo\Sitemaps;
 
 use Statamic\Facades\URL;
 

@@ -1,11 +1,11 @@
 <?php
 
-use WithCandour\AardvarkSeo\Http\Controllers\CP\DefaultsController;
-use WithCandour\AardvarkSeo\Http\Controllers\CP\GeneralController;
-use WithCandour\AardvarkSeo\Http\Controllers\CP\MarketingController;
-use WithCandour\AardvarkSeo\Http\Controllers\CP\Redirects\ManualRedirectsController;
-use WithCandour\AardvarkSeo\Http\Controllers\CP\SitemapController;
-use WithCandour\AardvarkSeo\Http\Controllers\CP\SocialController;
+use Justkidding96\AardvarkSeo\Http\Controllers\CP\DefaultsController;
+use Justkidding96\AardvarkSeo\Http\Controllers\CP\GeneralController;
+use Justkidding96\AardvarkSeo\Http\Controllers\CP\MarketingController;
+use Justkidding96\AardvarkSeo\Http\Controllers\CP\RedirectsController;
+use Justkidding96\AardvarkSeo\Http\Controllers\CP\SitemapController;
+use Justkidding96\AardvarkSeo\Http\Controllers\CP\SocialController;
 
 Route::prefix('aardvark-seo')
     ->name('aardvark-seo.')
@@ -35,26 +35,25 @@ Route::prefix('aardvark-seo')
             ]);
         });
 
-        // Redirects have their own section
+        // Redirects
         Route::name('redirects.')
             ->prefix('redirects')
             ->group(function () {
-                // Top level redirect
-                Route::redirect('/', 'redirects/manual-redirects')->name('index');
+                // CSV import/export
+                Route::get('export', [RedirectsController::class, 'export'])
+                    ->name('export');
+                Route::post('import', [RedirectsController::class, 'import'])
+                    ->name('import');
 
-                // Manual redirects
-                Route::prefix('manual-redirects')
-                    ->name('manual-redirects.')
-                    ->group(function () {
-                        Route::get('actions', [ManualRedirectsController::class, 'bulkActions'])
-                            ->name('actions');
+                // Bulk actions
+                Route::get('actions', [RedirectsController::class, 'bulkActions'])
+                    ->name('actions');
 
-                        Route::post('actions', [ManualRedirectsController::class, 'runActions'])
-                            ->name('run');
-                    });
-
-                Route::resource('manual-redirects', ManualRedirectsController::class)->only([
-                    'index', 'create', 'edit', 'update', 'store', 'destroy',
-                ]);
+                Route::post('actions', [RedirectsController::class, 'runActions'])
+                    ->name('run');
             });
+
+        Route::resource('redirects', RedirectsController::class)->only([
+            'index', 'create', 'edit', 'update', 'store', 'destroy',
+        ]);
     });

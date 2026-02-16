@@ -1,6 +1,6 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Schema\Parts;
+namespace Justkidding96\AardvarkSeo\Schema\Parts;
 
 use Spatie\SchemaOrg\Schema;
 use Statamic\Facades\Config;
@@ -9,8 +9,8 @@ use Statamic\Facades\Site;
 use Statamic\Facades\Term;
 use Statamic\Facades\URL;
 use Statamic\Support\Str;
-use WithCandour\AardvarkSeo\Schema\SchemaIds;
-use WithCandour\AardvarkSeo\Schema\Parts\Contracts\SchemaPart;
+use Justkidding96\AardvarkSeo\Schema\SchemaIds;
+use Justkidding96\AardvarkSeo\Schema\Parts\Contracts\SchemaPart;
 
 class Breadcrumbs implements SchemaPart
 {

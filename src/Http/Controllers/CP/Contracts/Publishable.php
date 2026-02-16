@@ -1,6 +1,6 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Http\Controllers\CP\Contracts;
+namespace Justkidding96\AardvarkSeo\Http\Controllers\CP\Contracts;
 
 interface Publishable
 {

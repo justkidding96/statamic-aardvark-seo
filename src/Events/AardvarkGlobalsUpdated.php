@@ -1,6 +1,6 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Events;
+namespace Justkidding96\AardvarkSeo\Events;
 
 use Statamic\Events\Event;
 use Statamic\Contracts\Git\ProvidesCommitMessage;
