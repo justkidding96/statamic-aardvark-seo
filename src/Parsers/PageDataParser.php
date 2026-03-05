@@ -161,7 +161,7 @@ class PageDataParser
     public static function generatePageTitle($data, $ctx)
     {
         if ($data->get('meta_title') && $data->get('meta_title')->raw()) {
-            return Parse::template($data->get('meta_title'), $ctx);
+            return Parse::template($data->get('meta_title'), [], $ctx);
         }
 
         if ($data->get('response_code') === 404) {
