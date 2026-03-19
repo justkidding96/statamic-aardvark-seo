@@ -1,7 +1,7 @@
 {
     "name": "justkidding96/aardvark-seo",
     "description": "Save time and get your Statamic site to rank better with the SEO addon for Statamic.",
-    "version": "5.1.0",
+    "license": "MIT",
     "type": "statamic-addon",
     "keywords": [
         "Statamic",
