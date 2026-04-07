@@ -99,6 +99,6 @@ class SitemapController extends LaravelController
     {
         $path = __DIR__ . '/../../../../composer.json';
         $contents = file_get_contents($path);
-        return json_decode($contents, true)['version'];
+        return json_decode($contents, true)['version'] ?? 'unknown';
     }
 }
