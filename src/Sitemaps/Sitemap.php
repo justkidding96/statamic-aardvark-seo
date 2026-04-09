@@ -108,7 +108,10 @@ class Sitemap
                 $items = Entry::query()
                     ->where('collection', $this->handle)
                     ->where('site', Site::current()->handle())
-                    ->where('date', '<=', now())
+                    ->where(function($query) {
+                        $query->where('date', '<=', now())
+                            ->orWhereNull('date');
+                    })
                     ->get()
                     ->filter(function ($entry) {
                         if ($entry->blueprint()->handle() === 'link') {
