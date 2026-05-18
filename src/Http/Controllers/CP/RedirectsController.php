@@ -10,6 +10,7 @@ use Justkidding96\AardvarkSeo\Events\Redirects\RedirectDeleted;
 use Justkidding96\AardvarkSeo\Events\Redirects\RedirectSaved;
 use Justkidding96\AardvarkSeo\Redirects\Repositories\RedirectsRepository;
 use Statamic\CP\Column;
+use Statamic\CP\PublishForm;
 use Statamic\Facades\Site;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
