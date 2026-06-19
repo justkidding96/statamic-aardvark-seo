@@ -180,14 +180,39 @@ Aardvark provides you with full control over how your site looks when shared on 
 
 We have a list of default social types but you may define your own in the addon settings, use the grid to add items to the 'Social Icon' dropdown.
 
+The following social types are available by default:
+
+| Handle | Label | Handle | Label |
+| --- | --- | --- | --- |
+| `amazon` | Amazon | `pinterest` | Pinterest |
+| `android` | Android | `reddit` | Reddit |
+| `apple` | Apple | `skype` | Skype |
+| `behance` | Behance | `slack` | Slack |
+| `bitbucket` | Bitbucket | `soundcloud` | Soundcloud |
+| `codepen` | Codepen | `spotify` | Spotify |
+| `dribbble` | Dribbble | `tiktok` | TikTok |
+| `facebook` | Facebook | `twitch` | Twitch |
+| `flickr` | Flickr | `twitter` | Twitter |
+| `foursquare` | Foursquare | `tumblr` | Tumblr |
+| `github` | Github | `whatsapp` | WhatsApp |
+| `google-plus` | Google Plus | `yelp` | Yelp |
+| `instagram` | Instagram | `youtube` | YouTube |
+| `linkedin` | LinkedIn | | |
+| `medium` | Medium | | |
+| `meetup` | Meetup | | |
+
+You can add your own social types through the `custom_socials` config option (see [Config](#config)). Note that this only adds a new handle to the dropdown — the addon does not ship any icons, so you are responsible for rendering an icon for your custom handle yourself (see below).
+
 The social media data can be accessed on the frontend through the `{{ aardvark-seo:socials }}` tag, use it to loop through the provided social media links.
+
+The addon does not render the icons themselves — `{{ social_icon }}` outputs the selected handle (e.g. `tiktok`), which you can pass to your own icon set. For example, using Font Awesome's brand icons:
 
 ### Socials tag example
 
 ```html
 <ul>
     {{ aardvark-seo:socials }}
-        <li><a href="{{ url }}">{{ social_icon }}</a></li>
+        <li><a href="{{ url }}"><i class="fa-brands fa-{{ social_icon }}"></i></a></li>
     {{ /aardvark-seo:socials }}
 </ul>
 ```
