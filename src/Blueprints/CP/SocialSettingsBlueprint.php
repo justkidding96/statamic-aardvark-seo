@@ -150,6 +150,7 @@ class SocialSettingsBlueprint implements AardvarkBlueprint
             'slack' => 'Slack',
             'soundcloud' => 'Soundcloud',
             'spotify' => 'Spotify',
+            'tiktok' => 'TikTok',
             'twitch' => 'Twitch',
             'twitter' => 'Twitter',
             'tumblr' => 'Tumblr',
