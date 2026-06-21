@@ -52,6 +52,15 @@ class PageDataParser
             return $value;
         });
 
+        // Snippet fields are only rendered in the head/footer output and are safe to
+        // backfill from the defaults when the page context doesn't carry them (e.g.
+        // routes that aren't backed by an entry, where the SEO fields aren't injected).
+        foreach (['head_snippets', 'footer_snippets'] as $snippet_field) {
+            if (!$data->has($snippet_field)) {
+                $data[$snippet_field] = $defaults->get($snippet_field);
+            }
+        }
+
         $data = self::populateAdditionalData($data, $ctx);
 
         return $data;
