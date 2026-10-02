@@ -6,15 +6,30 @@ use Statamic\Facades\Site;
 use Statamic\Support\Str;
 use Statamic\Facades\Config;
 use Statamic\Facades\URL;
+use Statamic\Exceptions\NotFoundHttpException;
+use Statamic\Statamic;
 use Justkidding96\AardvarkSeo\Redirects\Repositories\RedirectsRepository;
 
 class RedirectsMiddleware
 {
     public function handle($request, $next)
     {
+        // Resolve redirects while the 404 is rendered, inside the static cache middleware. If the
+        // redirect were only returned below, the static cache would store the redirect's status and
+        // headers for the 404 it just cached, including the shared error page when `share_errors`
+        // is enabled, sending every later 404 to the same redirect target.
+        NotFoundHttpException::renderUsing(function ($request) {
+            if (Statamic::isCpRoute() || Statamic::isApiRoute()) {
+                return null;
+            }
+
+            return app(RedirectsMiddleware::class)->getRedirectResponse($request);
+        });
+
         // If there is a 404 search our redirects and stuff
         $response = $next($request);
 
+        // Catches a 404 served straight from the static cache, which never reaches the exception renderer
         if ($response->getStatusCode() === 404) {
             if ($redirect = $this->getRedirectResponse($request)) {
                 return $redirect;
@@ -27,7 +42,7 @@ class RedirectsMiddleware
     /**
      * Return a redirect response when the request matches an active redirect
      */
-    private function getRedirectResponse($request)
+    public function getRedirectResponse($request)
     {
         // Get the current site root
         $site_root = Url::makeRelative(Url::makeAbsolute(Config::getSiteUrl()));
