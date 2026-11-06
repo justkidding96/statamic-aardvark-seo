@@ -1,6 +1,6 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Schema;
+namespace Justkidding96\AardvarkSeo\Schema;
 
 class SchemaIds
 {

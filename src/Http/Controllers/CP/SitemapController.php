@@ -1,13 +1,12 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Http\Controllers\CP;
+namespace Justkidding96\AardvarkSeo\Http\Controllers\CP;
 
-use Statamic\CP\Breadcrumbs;
 use Statamic\Facades\Site;
-use WithCandour\AardvarkSeo\Blueprints\CP\SitemapSettingsBlueprint;
-use WithCandour\AardvarkSeo\Events\AardvarkGlobalsUpdated;
-use WithCandour\AardvarkSeo\Facades\AardvarkStorage;
-use WithCandour\AardvarkSeo\Http\Controllers\CP\Contracts\Publishable;
+use Justkidding96\AardvarkSeo\Blueprints\CP\SitemapSettingsBlueprint;
+use Justkidding96\AardvarkSeo\Events\AardvarkGlobalsUpdated;
+use Justkidding96\AardvarkSeo\Facades\AardvarkStorage;
+use Justkidding96\AardvarkSeo\Http\Controllers\CP\Contracts\Publishable;
 
 class SitemapController extends Controller implements Publishable
 {
@@ -16,22 +15,12 @@ class SitemapController extends Controller implements Publishable
         $this->authorize('view aardvark sitemap settings');
 
         $data = $this->getData();
-
         $blueprint = $this->getBlueprint();
-        $fields = $blueprint->fields()->addValues($data)->preProcess();
 
-        $crumbs = Breadcrumbs::make([
-            ['text' => 'Aardvark SEO', 'url' => url(config('statamic.cp.route') . '/aardvark-seo/settings')],
-            ['text' => 'Sitemap Settings', 'url' => url(config('statamic.cp.route') . '/aardvark-seo/settings/sitemap')],
-        ]);
-
-        return view('aardvark-seo::cp.settings.sitemap', [
-            'blueprint' => $blueprint->toPublishArray(),
-            'crumbs' => $crumbs,
-            'meta' => $fields->meta(),
-            'title' => 'Sitemap Settings | Aardvark SEO',
-            'values' => $fields->values(),
-        ]);
+        return \Statamic\CP\PublishForm::make($blueprint)
+            ->title('Sitemap Settings')
+            ->values($data)
+            ->submittingTo(cp_route('aardvark-seo.sitemap.store'), 'POST');
     }
 
     public function store(\Illuminate\Http\Request $request)

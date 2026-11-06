@@ -1,14 +1,14 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Tags;
+namespace Justkidding96\AardvarkSeo\Tags;
 
 use Statamic\Facades\Entry;
 use Statamic\Facades\Site;
 use Statamic\Tags\Tags;
 use Statamic\View\View;
-use WithCandour\AardvarkSeo\Schema\SchemaGraph;
-use WithCandour\AardvarkSeo\Facades\AardvarkStorage;
-use WithCandour\AardvarkSeo\Facades\PageDataParser;
+use Justkidding96\AardvarkSeo\Schema\SchemaGraph;
+use Justkidding96\AardvarkSeo\Facades\AardvarkStorage;
+use Justkidding96\AardvarkSeo\Facades\PageDataParser;
 
 class AardvarkSeoTags extends Tags
 {
@@ -101,19 +101,27 @@ class AardvarkSeoTags extends Tags
             return null;
         }
 
+
+        $defaultLocale = $ctx->get('aardvark_general_settings')['default_locale'];
+
+        if ($defaultLocale instanceof \Statamic\Fields\Value) {
+            $defaultLocale = $defaultLocale->value();
+        }
+
         $sites_by_handle = Site::all()->reduce(function($sites, $site) {
             $sites[$site->handle()] = $site;
             return $sites;
         }, []);
 
-        $alternates = $data->sites()->map(function ($handle) use ($data, $sites_by_handle) {
+        $alternates = $data->sites()->map(function ($handle) use ($data, $sites_by_handle, $defaultLocale) {
             $localized_data = $data->in($handle);
 
             if(!empty($localized_data) && $localized_data->published()) {
                 $site = $sites_by_handle[$handle];
                 return [
                     'url' => $localized_data->absoluteUrl(),
-                    'locale' => $site->locale()
+                    'locale' => $site->locale(),
+                    'default' => !empty($defaultLocale) ? $site->handle === $defaultLocale->handle : false,
                 ];
             }
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Facades;
+namespace Justkidding96\AardvarkSeo\Facades;
 
-use WithCandour\AardvarkSeo\Storage\GlobalsStorage;
+use Justkidding96\AardvarkSeo\Storage\GlobalsStorage;
 use Illuminate\Support\Facades\Facade;
 
 class AardvarkStorage extends Facade

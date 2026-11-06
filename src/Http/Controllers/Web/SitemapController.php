@@ -1,13 +1,13 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Http\Controllers\Web;
+namespace Justkidding96\AardvarkSeo\Http\Controllers\Web;
 
 use Illuminate\Routing\Controller as LaravelController;
 use Illuminate\Support\Facades\Cache;
 use Statamic\Facades\Site;
-use WithCandour\AardvarkSeo\Sitemaps\Sitemap;
-use WithCandour\AardvarkSeo\Blueprints\CP\SitemapSettingsBlueprint;
-use WithCandour\AardvarkSeo\Facades\AardvarkStorage;
+use Justkidding96\AardvarkSeo\Sitemaps\Sitemap;
+use Justkidding96\AardvarkSeo\Blueprints\CP\SitemapSettingsBlueprint;
+use Justkidding96\AardvarkSeo\Facades\AardvarkStorage;
 
 class SitemapController extends LaravelController
 {
@@ -99,6 +99,6 @@ class SitemapController extends LaravelController
     {
         $path = __DIR__ . '/../../../../composer.json';
         $contents = file_get_contents($path);
-        return json_decode($contents, true)['version'];
+        return json_decode($contents, true)['version'] ?? \Composer\InstalledVersions::getVersion('justkidding96/aardvark-seo') ?? 'unknown';
     }
 }

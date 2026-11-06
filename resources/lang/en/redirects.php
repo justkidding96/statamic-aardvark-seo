@@ -8,12 +8,6 @@ return [
     // Control Panel
     'index' => 'Redirects Settings',
 
-    // Types
-    'manual' => [
-        'singular' => 'Manual redirect',
-        'plural' => 'Manual redirects'
-    ],
-
     // Redirect attributes
     'redirect' => [
         'source_url' => 'Source URL',
@@ -33,13 +27,19 @@ return [
     'pages' => [
         'create' => 'Create a redirect',
         'edit' => 'Edit a redirect',
-        'manual' => 'Manual redirects',
     ],
 
     // Actions
     'actions' => [
         'create' => 'Create a redirect',
-        'manual' => 'Manual redirects'
-    ]
+    ],
+
+    // Import
+    'import' => [
+        'success' => ':imported redirect(s) imported, :skipped skipped.',
+        'error_reading' => 'Could not read the uploaded file.',
+        'invalid_format' => 'Invalid CSV format. The file must have at least two columns.',
+        'missing_columns' => 'CSV must contain source_url and target_url columns.',
+    ],
 
 ];

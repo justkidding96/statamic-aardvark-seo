@@ -1,6 +1,6 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Events;
+namespace Justkidding96\AardvarkSeo\Events;
 
 use Statamic\Events\Event;
 use Statamic\Contracts\Git\ProvidesCommitMessage;
@@ -8,12 +8,12 @@ use Statamic\Contracts\Git\ProvidesCommitMessage;
 class AardvarkContentDefaultsSaved extends Event implements ProvidesCommitMessage
 {
     /**
-     * @var WithCandour\AardvarkSeo\Content\Defaults
+     * @var Justkidding96\AardvarkSeo\Content\Defaults
      */
     public $defaults;
 
     /**
-     * @param WithCandour\AardvarkSeo\Content\Defaults $defaults
+     * @param Justkidding96\AardvarkSeo\Content\Defaults $defaults
      */
     public function __construct($defaults)
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Storage;
+namespace Justkidding96\AardvarkSeo\Storage;
 
 use Statamic\Sites\Site;
 

@@ -1,15 +1,15 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Schema;
+namespace Justkidding96\AardvarkSeo\Schema;
 
 use Spatie\SchemaOrg\Graph;
-use WithCandour\AardvarkSeo\Blueprints\CP\GeneralSettingsBlueprint;
-use WithCandour\AardvarkSeo\Facades\PageDataParser;
-use WithCandour\AardvarkSeo\Schema\SchemaIds;
-use WithCandour\AardvarkSeo\Schema\Parts\Breadcrumbs;
-use WithCandour\AardvarkSeo\Schema\Parts\SiteOwner;
-use WithCandour\AardvarkSeo\Schema\Parts\WebPage;
-use WithCandour\AardvarkSeo\Schema\Parts\WebSite;
+use Justkidding96\AardvarkSeo\Blueprints\CP\GeneralSettingsBlueprint;
+use Justkidding96\AardvarkSeo\Facades\PageDataParser;
+use Justkidding96\AardvarkSeo\Schema\SchemaIds;
+use Justkidding96\AardvarkSeo\Schema\Parts\Breadcrumbs;
+use Justkidding96\AardvarkSeo\Schema\Parts\SiteOwner;
+use Justkidding96\AardvarkSeo\Schema\Parts\WebPage;
+use Justkidding96\AardvarkSeo\Schema\Parts\WebSite;
 
 class SchemaGraph
 {
@@ -45,8 +45,13 @@ class SchemaGraph
         $webPage = new WebPage($this->context);
         $webPageData = $webPage->data();
 
-        // // If breadcrumbs are enabled - add them to the graph
-        if (!empty($this->globals->get('enable_breadcrumbs', 0)) && $this->context->get('url', '') !== '/') {
+        $enableBreadcrumbs = $this->globals->get('enable_breadcrumbs') ?? false;
+        if ($enableBreadcrumbs instanceof \Statamic\Fields\Value) {
+            $enableBreadcrumbs = (bool) $enableBreadcrumbs->value();
+        }
+
+        // If breadcrumbs are enabled - add them to the graph
+        if ($enableBreadcrumbs && $this->context->get('url', '') !== '/') {
             $breadcrumbs = new Breadcrumbs();
             $webPageData->breadcrumb($breadcrumbs->data());
         }

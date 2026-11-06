@@ -1,11 +1,11 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Events\Redirects;
+namespace Justkidding96\AardvarkSeo\Events\Redirects;
 
 use Statamic\Events\Event;
 use Statamic\Contracts\Git\ProvidesCommitMessage;
 
-class ManualRedirectDeleted extends Event implements ProvidesCommitMessage
+class RedirectDeleted extends Event implements ProvidesCommitMessage
 {
     public function __construct()
     {
@@ -17,6 +17,6 @@ class ManualRedirectDeleted extends Event implements ProvidesCommitMessage
      */
     public function commitMessage()
     {
-        return 'Aardvark manual redirect deleted';
+        return 'Aardvark redirect deleted';
     }
 }

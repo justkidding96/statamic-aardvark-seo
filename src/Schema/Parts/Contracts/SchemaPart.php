@@ -1,6 +1,6 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Schema\Parts\Contracts;
+namespace Justkidding96\AardvarkSeo\Schema\Parts\Contracts;
 
 interface SchemaPart
 {

@@ -1,14 +1,14 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Http\Controllers\CP;
+namespace Justkidding96\AardvarkSeo\Http\Controllers\CP;
 
-use Statamic\CP\Breadcrumbs;
 use Statamic\Facades\Site;
 use Statamic\Facades\User;
-use WithCandour\AardvarkSeo\Blueprints\CP\GeneralSettingsBlueprint;
-use WithCandour\AardvarkSeo\Events\AardvarkGlobalsUpdated;
-use WithCandour\AardvarkSeo\Facades\AardvarkStorage;
-use WithCandour\AardvarkSeo\Http\Controllers\CP\Contracts\Publishable;
+use Statamic\CP\PublishForm;
+use Justkidding96\AardvarkSeo\Blueprints\CP\GeneralSettingsBlueprint;
+use Justkidding96\AardvarkSeo\Events\AardvarkGlobalsUpdated;
+use Justkidding96\AardvarkSeo\Facades\AardvarkStorage;
+use Justkidding96\AardvarkSeo\Http\Controllers\CP\Contracts\Publishable;
 
 class GeneralController extends Controller implements Publishable
 {
@@ -17,22 +17,12 @@ class GeneralController extends Controller implements Publishable
         $this->authorize('view aardvark general settings');
 
         $data = $this->getData();
-
         $blueprint = $this->getBlueprint();
-        $fields = $blueprint->fields()->addValues($data)->preProcess();
 
-        $crumbs = Breadcrumbs::make([
-            ['text' => 'Aardvark SEO', 'url' => url(config('statamic.cp.route') . '/aardvark-seo/settings')],
-            ['text' => 'General Settings', 'url' => url(config('statamic.cp.route') . '/aardvark-seo/settings/general')],
-        ]);
-
-        return view('aardvark-seo::cp.settings.general', [
-            'blueprint' => $blueprint->toPublishArray(),
-            'crumbs' => $crumbs,
-            'meta' => $fields->meta(),
-            'title' => 'General Settings | Aardvark SEO',
-            'values' => $fields->values(),
-        ]);
+        return PublishForm::make($blueprint)
+            ->title('General SEO Settings')
+            ->values($data)
+            ->submittingTo(cp_route('aardvark-seo.general.store'), 'POST');
     }
 
     public function store(\Illuminate\Http\Request $request)

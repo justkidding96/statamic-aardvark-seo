@@ -1,11 +1,11 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Listeners;
+namespace Justkidding96\AardvarkSeo\Listeners;
 
 use Statamic\Events\EntryBlueprintFound;
-use WithCandour\AardvarkSeo\Blueprints\CP\OnPageSeoBlueprint;
-use WithCandour\AardvarkSeo\Listeners\Contracts\SeoFieldsListener;
 use Statamic\Support\Str;
+use Justkidding96\AardvarkSeo\Blueprints\CP\OnPageSeoBlueprint;
+use Justkidding96\AardvarkSeo\Listeners\Contracts\SeoFieldsListener;
 
 class AppendEntrySeoFieldsListener implements SeoFieldsListener
 {
@@ -23,15 +23,10 @@ class AppendEntrySeoFieldsListener implements SeoFieldsListener
 
         $handle = $event->blueprint->namespace();
         if ($this->check_content_type($handle)) {
-            $bp = $event->blueprint;
-            $contents = $bp->contents();
-
-            $on_page_bp = OnPageSeoBlueprint::requestBlueprint();
-            $on_page_fields = $on_page_bp->contents()['sections']['main'];
-
-            $contents['sections']['SEO'] = $on_page_fields;
-
-            $bp->setContents($contents);
+            // Add SEO tab with sectioned card panels
+            $contents = $event->blueprint->contents();
+            $contents['tabs']['SEO'] = ['sections' => OnPageSeoBlueprint::seoTabSections()];
+            $event->blueprint->setContents($contents);
         }
     }
 

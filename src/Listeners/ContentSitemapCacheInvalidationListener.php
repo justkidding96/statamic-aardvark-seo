@@ -1,6 +1,6 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Listeners;
+namespace Justkidding96\AardvarkSeo\Listeners;
 
 use Illuminate\Support\Facades\Cache;
 use Statamic\Support\Str;

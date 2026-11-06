@@ -1,16 +1,16 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Parsers;
+namespace Justkidding96\AardvarkSeo\Parsers;
 
 use Statamic\Facades\Collection;
 use Statamic\Facades\Parse;
 use Statamic\Facades\Site;
-use WithCandour\AardvarkSeo\Blueprints\CP\DefaultsSettingsBlueprint;
-use WithCandour\AardvarkSeo\Blueprints\CP\GeneralSettingsBlueprint;
-use WithCandour\AardvarkSeo\Blueprints\CP\MarketingSettingsBlueprint;
-use WithCandour\AardvarkSeo\Blueprints\CP\SocialSettingsBlueprint;
-use WithCandour\AardvarkSeo\Blueprints\CP\OnPageSeoBlueprint;
-use WithCandour\AardvarkSeo\Facades\AardvarkStorage;
+use Justkidding96\AardvarkSeo\Blueprints\CP\DefaultsSettingsBlueprint;
+use Justkidding96\AardvarkSeo\Blueprints\CP\GeneralSettingsBlueprint;
+use Justkidding96\AardvarkSeo\Blueprints\CP\MarketingSettingsBlueprint;
+use Justkidding96\AardvarkSeo\Blueprints\CP\SocialSettingsBlueprint;
+use Justkidding96\AardvarkSeo\Blueprints\CP\OnPageSeoBlueprint;
+use Justkidding96\AardvarkSeo\Facades\AardvarkStorage;
 
 /**
  * Helper class for parsing on-page data
@@ -52,6 +52,15 @@ class PageDataParser
             return $value;
         });
 
+        // Snippet fields are only rendered in the head/footer output and are safe to
+        // backfill from the defaults when the page context doesn't carry them (e.g.
+        // routes that aren't backed by an entry, where the SEO fields aren't injected).
+        foreach (['head_snippets', 'footer_snippets'] as $snippet_field) {
+            if (!$data->has($snippet_field)) {
+                $data[$snippet_field] = $defaults->get($snippet_field);
+            }
+        }
+
         $data = self::populateAdditionalData($data, $ctx);
 
         return $data;
@@ -84,7 +93,7 @@ class PageDataParser
                 }
                 break;
             case 'collections':
-                $repo = $ctx->get('taxonomy');
+                $repo = $ctx->get('collection');
                 if ($repo instanceof \Statamic\Fields\Value) {
                     $repo = $repo->value();
                 }
@@ -125,6 +134,8 @@ class PageDataParser
             'aardvark_general_settings' => self::getSettingsBlueprintWithValues($ctx, 'general', new GeneralSettingsBlueprint()),
             'aardvark_marketing_settings' => self::getSettingsBlueprintWithValues($ctx, 'marketing', new MarketingSettingsBlueprint()),
             'aardvark_social_settings' => self::getSettingsBlueprintWithValues($ctx, 'social', new SocialSettingsBlueprint()),
+            'disable_favicons' => config('aardvark-seo.disable_favicons', false),
+            'disable_default_schema' => config('aardvark-seo.disable_default_schema', false),
         ];
 
         return $data->merge($populated);
@@ -158,18 +169,34 @@ class PageDataParser
      */
     public static function generatePageTitle($data, $ctx)
     {
-        if ($data->get('meta_title') && $data->get('meta_title')->raw()) {
-            return Parse::template($data->get('meta_title'), $ctx);
-        }
-
-        if ($data->get('response_code') === 404) {
-            $data->put('title', '404');
-        }
-
         $storage = self::getSettingsBlueprintWithValues($ctx, 'general', new GeneralSettingsBlueprint());
 
+        $appendSiteName = $storage->get('append_site_name');
+        $appendSiteName = $appendSiteName instanceof \Statamic\Fields\Value ? $appendSiteName->value() : $appendSiteName;
+
+        if ($data->get('meta_title') && $data->get('meta_title')->raw()) {
+            $title = Parse::template($data->get('meta_title'), $ctx->all());
+
+            if (! $appendSiteName) {
+                return $title;
+            }
+        } else {
+            $title = $data->get('response_code') === 404 ? '404' : $data->get('title');
+        }
+
+        $titleOrder = $storage->get('title_order');
+        $titleOrderValue = $titleOrder instanceof \Statamic\Fields\Value ? $titleOrder->raw() : $titleOrder;
+
+        if ($titleOrderValue === 'site_first') {
+            return implode(' ', [
+                $storage->get('site_name'),
+                $storage->get('title_separator'),
+                $title,
+            ]);
+        }
+
         return implode(' ', [
-            $data->get('title'),
+            $title,
             $storage->get('title_separator'),
             $storage->get('site_name'),
         ]);

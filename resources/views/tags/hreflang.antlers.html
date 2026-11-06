@@ -1,5 +1,8 @@
 {{ if hreflang_tags }}
     {{ hreflang_tags }}
+        {{ if default }}
+        <link rel='alternate' href="{{ url }}" hreflang="x-default" >
+        {{ /if }}
         <link rel='alternate' href="{{ url }}" hreflang="{{ locale | aardvark_parse_locale }}" >
     {{ /hreflang_tags }}
 {{ /if }}

@@ -1,8 +1,8 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Facades;
+namespace Justkidding96\AardvarkSeo\Facades;
 
-use WithCandour\AardvarkSeo\Content\ContentDefaultsGetter;
+use Justkidding96\AardvarkSeo\Content\ContentDefaultsGetter;
 use Illuminate\Support\Facades\Facade;
 
 class ContentDefaults extends Facade

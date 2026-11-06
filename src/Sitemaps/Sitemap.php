@@ -1,6 +1,6 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Sitemaps;
+namespace Justkidding96\AardvarkSeo\Sitemaps;
 
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
@@ -8,12 +8,30 @@ use Statamic\Facades\Site;
 use Statamic\Facades\Taxonomy;
 use Statamic\Facades\Term;
 use Statamic\Support\Str;
-use WithCandour\AardvarkSeo\Facades\AardvarkStorage;
-use WithCandour\AardvarkSeo\Facades\ContentDefaults as Defaults;
-use WithCandour\AardvarkSeo\Blueprints\CP\SitemapSettingsBlueprint;
+use Justkidding96\AardvarkSeo\Facades\AardvarkStorage;
+use Justkidding96\AardvarkSeo\Facades\ContentDefaults as Defaults;
+use Justkidding96\AardvarkSeo\Blueprints\CP\SitemapSettingsBlueprint;
 
 class Sitemap
 {
+    /**
+     * @var string
+     */
+    public $type;
+
+    /**
+     * @var string
+     */
+    public $handle;
+
+    /**
+     * @var Statamic\Sites\Site
+     */
+    public $site;
+
+    public $route;
+    public $url;
+
     /**
      * Create a new sitemap.
      *
@@ -90,8 +108,21 @@ class Sitemap
                 $items = Entry::query()
                     ->where('collection', $this->handle)
                     ->where('site', Site::current()->handle())
-                    ->where('redirect', '=', null)
-                    ->get();
+                    ->where(function($query) {
+                        $query->where('date', '<=', now())
+                            ->orWhereNull('date');
+                    })
+                    ->get()
+                    ->filter(function ($entry) {
+                        if ($entry->blueprint()->handle() === 'link') {
+                            return false;
+                        }
+                        $redirect = $entry->get('redirect');
+                        if (is_string($redirect)) {
+                            return empty($redirect);
+                        }
+                        return true;
+                    });
                 break;
             case 'taxonomy':
                 $items = Term::query()
@@ -262,7 +293,7 @@ class Sitemap
      *
      * @param string $handle
      *
-     * @return WithCandour\AardvarkSeo\Sitemaps\Sitemap
+     * @return Justkidding96\AardvarkSeo\Sitemaps\Sitemap
      */
     public static function findByHandle($handle = '')
     {

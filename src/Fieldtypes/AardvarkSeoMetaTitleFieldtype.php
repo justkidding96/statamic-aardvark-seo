@@ -1,10 +1,10 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Fieldtypes;
+namespace Justkidding96\AardvarkSeo\Fieldtypes;
 
 use Statamic\Facades\Site;
 use Statamic\Fields\Fieldtype;
-use WithCandour\AardvarkSeo\Facades\AardvarkStorage;
+use Justkidding96\AardvarkSeo\Facades\AardvarkStorage;
 
 class AardvarkSeoMetaTitleFieldtype extends Fieldtype
 {
@@ -17,9 +17,13 @@ class AardvarkSeoMetaTitleFieldtype extends Fieldtype
     {
         $site = Site::selected();
         $data = AardvarkStorage::getYaml('general', $site, true);
+
         return [
             'site_name' => $data->get('site_name', ''),
             'title_separator' => $data->get('title_separator', '|'),
+            'title_order' => $data->get('title_order', 'title_first'),
+            'append_site_name' => (bool) $data->get('append_site_name', false),
+            'title_max_length' => config('aardvark-seo.title_max_length', 70),
         ];
     }
 }

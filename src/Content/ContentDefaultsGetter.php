@@ -1,9 +1,9 @@
 <?php
 
-namespace WithCandour\AardvarkSeo\Content;
+namespace Justkidding96\AardvarkSeo\Content;
 
 use Statamic\Facades\Site;
-use WithCandour\AardvarkSeo\Facades\AardvarkStorage;
+use Justkidding96\AardvarkSeo\Facades\AardvarkStorage;
 
 class ContentDefaultsGetter
 {
