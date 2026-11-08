@@ -120,10 +120,7 @@ class RedirectsRepository
     public function getBySource(string $source_url): array|false|null
     {
         return $this->sourceExists($source_url)
-            ? $this->redirects->first(function ($redirect) use ($source_url) {
-                $redirect_source_url = str_replace('/', '\/', $redirect['source_url']);
-                return preg_match("/^{$redirect_source_url}/i", $source_url) === 1 && $source_url !== $redirect['target_url'];
-            })
+            ? $this->redirects->first(fn($redirect) => $this->matchesSource($redirect, $source_url))
             : false;
     }
 
@@ -209,10 +206,25 @@ class RedirectsRepository
      */
     public function sourceExists(string $source_url): bool
     {
-        return $this->redirects->contains(function ($redirect) use ($source_url) {
-            $redirect_source_url = str_replace('/', '\/', $redirect['source_url']);
-            return preg_match("/^{$redirect_source_url}/i", $source_url) === 1 && $source_url !== $redirect['target_url'];
-        });
+        return $this->redirects->contains(fn($redirect) => $this->matchesSource($redirect, $source_url));
+    }
+
+    /**
+     * Check if a redirect's source URL (which may be a regex) matches the full given URL.
+     */
+    private function matchesSource(array $redirect, string $source_url): bool
+    {
+        if ($source_url === $redirect['target_url']) {
+            return false;
+        }
+
+        if ($source_url === $redirect['source_url']) {
+            return true;
+        }
+
+        $pattern = '~^' . str_replace('~', '\~', $redirect['source_url']) . '$~';
+
+        return @preg_match($pattern, $source_url) === 1;
     }
 
     /**
@@ -266,13 +278,9 @@ class RedirectsRepository
         $data = $this->processRaw($data);
 
         if (! $redirect_id) {
-            if (! $this->sourceExists($data['source_url'])) {
-                $redirect_id = (string) Str::uuid();
-                $data['id'] = $redirect_id;
-            } else {
-                $redirect_id = $this->getBySource($data['source_url'])['id'];
-                $data['id'] = $redirect_id;
-            }
+            $existing = $this->redirects->firstWhere('source_url', $data['source_url']);
+            $redirect_id = $existing ? $existing['id'] : (string) Str::uuid();
+            $data['id'] = $redirect_id;
         } else {
             $data['id'] = $redirect_id;
         }
