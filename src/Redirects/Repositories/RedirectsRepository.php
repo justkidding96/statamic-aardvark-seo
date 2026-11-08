@@ -119,9 +119,12 @@ class RedirectsRepository
      */
     public function getBySource(string $source_url): array|false|null
     {
-        return $this->sourceExists($source_url)
-            ? $this->redirects->first(fn($redirect) => $this->matchesSource($redirect, $source_url))
-            : false;
+        if (! $this->sourceExists($source_url)) {
+            return false;
+        }
+
+        return $this->redirects->firstWhere('source_url', $source_url)
+            ?? $this->redirects->first(fn($redirect) => $this->matchesPattern($redirect, $source_url));
     }
 
     /**
@@ -206,20 +209,17 @@ class RedirectsRepository
      */
     public function sourceExists(string $source_url): bool
     {
-        return $this->redirects->contains(fn($redirect) => $this->matchesSource($redirect, $source_url));
+        return $this->redirects->contains('source_url', $source_url)
+            || $this->redirects->contains(fn($redirect) => $this->matchesPattern($redirect, $source_url));
     }
 
     /**
-     * Check if a redirect's source URL (which may be a regex) matches the full given URL.
+     * Check if a pattern redirect's source URL (a regex) matches the full given URL.
      */
-    private function matchesSource(array $redirect, string $source_url): bool
+    private function matchesPattern(array $redirect, string $source_url): bool
     {
-        if ($source_url === $redirect['target_url']) {
+        if (empty($redirect['is_pattern']) || $source_url === $redirect['target_url']) {
             return false;
-        }
-
-        if ($source_url === $redirect['source_url']) {
-            return true;
         }
 
         $pattern = '~^' . str_replace('~', '\~', $redirect['source_url']) . '$~';

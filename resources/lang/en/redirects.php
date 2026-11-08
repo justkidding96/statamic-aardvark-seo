@@ -13,7 +13,9 @@ return [
         'source_url' => 'Source URL',
         'target_url' => 'Target URL',
         'status_code' => 'Status Code',
-        'is_active' => 'Is Active?'
+        'is_active' => 'Is Active?',
+        'is_pattern' => 'Is Pattern?',
+        'is_pattern_instructions' => 'Treat the source URL as a regular expression that must match the whole URL, e.g. `/blog/.*`.',
     ],
 
     // Permissions

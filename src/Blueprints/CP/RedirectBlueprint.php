@@ -53,6 +53,15 @@ class RedirectBlueprint implements AardvarkBlueprint
                                         'default' => true,
                                     ],
                                 ],
+                                [
+                                    'handle' => 'is_pattern',
+                                    'field' => [
+                                        'type' => 'toggle',
+                                        'display' => __('aardvark-seo::redirects.redirect.is_pattern'),
+                                        'instructions' => __('aardvark-seo::redirects.redirect.is_pattern_instructions'),
+                                        'default' => false,
+                                    ],
+                                ],
                             ],
                         ],
                     ],
