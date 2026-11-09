@@ -133,6 +133,10 @@ You can manage the list of redirects for your site from within the control panel
 
 Redirects support both 301 (permanent) and 302 (temporary) status codes, and trailing slashes are handled automatically.
 
+### Pattern Redirects
+
+Turn on "Is Pattern?" to treat the source URL as a regular expression, so one redirect can cover many URLs. The pattern must match the whole URL, e.g. `/blog/.*` redirects every URL under `/blog/`. A redirect with an exact source URL always wins over a pattern, and a pattern never redirects its own target URL.
+
 ### CSV Import/Export
 
 You can export all redirects as a CSV file and import redirects from a CSV file. The CSV file should have the following columns: `source_url`, `target_url`, and optionally `status_code`.

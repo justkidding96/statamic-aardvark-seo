@@ -119,9 +119,12 @@ class RedirectsRepository
      */
     public function getBySource(string $source_url): array|false|null
     {
-        return $this->sourceExists($source_url)
-            ? $this->redirects->where('source_url', $source_url)->first()
-            : false;
+        if (! $this->sourceExists($source_url)) {
+            return false;
+        }
+
+        return $this->redirects->firstWhere('source_url', $source_url)
+            ?? $this->redirects->first(fn($redirect) => $this->matchesPattern($redirect, $source_url));
     }
 
     /**
@@ -206,7 +209,22 @@ class RedirectsRepository
      */
     public function sourceExists(string $source_url): bool
     {
-        return $this->redirects->contains('source_url', $source_url);
+        return $this->redirects->contains('source_url', $source_url)
+            || $this->redirects->contains(fn($redirect) => $this->matchesPattern($redirect, $source_url));
+    }
+
+    /**
+     * Check if a pattern redirect's source URL (a regex) matches the full given URL.
+     */
+    private function matchesPattern(array $redirect, string $source_url): bool
+    {
+        if (empty($redirect['is_pattern']) || $source_url === $redirect['target_url']) {
+            return false;
+        }
+
+        $pattern = '~^' . str_replace('~', '\~', $redirect['source_url']) . '$~';
+
+        return @preg_match($pattern, $source_url) === 1;
     }
 
     /**
@@ -260,13 +278,9 @@ class RedirectsRepository
         $data = $this->processRaw($data);
 
         if (! $redirect_id) {
-            if (! $this->sourceExists($data['source_url'])) {
-                $redirect_id = (string) Str::uuid();
-                $data['id'] = $redirect_id;
-            } else {
-                $redirect_id = $this->getBySource($data['source_url'])['id'];
-                $data['id'] = $redirect_id;
-            }
+            $existing = $this->redirects->firstWhere('source_url', $data['source_url']);
+            $redirect_id = $existing ? $existing['id'] : (string) Str::uuid();
+            $data['id'] = $redirect_id;
         } else {
             $data['id'] = $redirect_id;
         }
