@@ -71,7 +71,7 @@ class Breadcrumbs implements SchemaPart
                 }
             }
 
-            $item->setProperty('id', $crumb->absoluteUrl());
+            $item->setProperty('@id', $crumb->absoluteUrl());
             $listItem->item($item);
             $listItems[] = $listItem;
             $position++;
